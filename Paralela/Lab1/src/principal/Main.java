@@ -12,10 +12,9 @@ public class Main {
 		ExecutorService executar_leitor = Executors.newFixedThreadPool(4);
 		ScheduledExecutorService executar_escritor = Executors.newScheduledThreadPool(1);
 		Buffer sharedLocation = new ImplementacaoBuffer();
-		try {
-			executar_leitor.execute(new Leitor(sharedLocation));
-
+		try {		
 			executar_escritor.scheduleAtFixedRate(new Escritor(sharedLocation), 0, 1, TimeUnit.MILLISECONDS);
+			executar_leitor.execute(new Leitor(sharedLocation));
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
