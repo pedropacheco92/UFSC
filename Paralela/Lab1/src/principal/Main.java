@@ -9,18 +9,27 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		ExecutorService executar_leitor = Executors.newFixedThreadPool(4);
-		ScheduledExecutorService executar_escritor = Executors.newScheduledThreadPool(120);
+		ExecutorService threadsLeitoras = Executors.newFixedThreadPool(4);
+		ScheduledExecutorService threadsEscritoras = Executors.newScheduledThreadPool(1);
 		Buffer sharedLocation = new ImplementacaoBuffer();
 		try {
 			for (int i = 0; i <= 120; i++) {
-				executar_leitor.execute(new Leitor(sharedLocation));
+				threadsLeitoras.execute(new Leitor(sharedLocation));
+				threadsEscritoras.scheduleAtFixedRate(new Escritor(sharedLocation), 0, 1, TimeUnit.MILLISECONDS);
 			}
-			executar_escritor.scheduleAtFixedRate(new Escritor(sharedLocation), 0, 1, TimeUnit.MILLISECONDS);
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
-		executar_leitor.shutdown();
-		executar_escritor.shutdown();
+		threadsLeitoras.shutdown();
+		threadsEscritoras.shutdown();
+
+		while (!threadsEscritoras.isTerminated()) {
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				System.out.println("Thread: " + Thread.currentThread().getName() + " não finalizada.");
+			}
+		}
+		System.exit(0);
 	}
 }

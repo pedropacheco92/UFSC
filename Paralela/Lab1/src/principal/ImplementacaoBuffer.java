@@ -2,60 +2,48 @@ package principal;
 
 public class ImplementacaoBuffer implements Buffer {
 
-	private int buffer = 0;
-
 	private boolean occupied = false;
+	private int mensagem = 0;
+	private int threadLeitor = 0;
 
 	@Override
 	public synchronized void escrever(int value) {
 		while (this.occupied) {
 			try {
 				wait();
-			}
-
-			catch (InterruptedException exception) {
-				exception.printStackTrace();
+			} catch (InterruptedException e) {
+				System.out.println("A thread: " + Thread.currentThread().getName() + " não escreveu a mensagem.");
 			}
 		}
-
-		this.buffer = value;
-
+		this.mensagem = value;
 		this.occupied = true;
-
-		System.out.print("\n" + "ESCREVEU " + this.buffer + "\n");
-
+		String nomethread = Thread.currentThread().getName();
+		System.out.println(nomethread + "-" + "MENSAGEM ENVIADA: " + value);
 		notifyAll();
 	}
 
 	@Override
 	public synchronized int ler() {
+		String nomethread = Thread.currentThread().getName();
 		while (!this.occupied) {
 			try {
-				if (this.buffer == 0) {
-					wait();
-				} else {
-					notifyAll();
-				}
-			}
-
-			catch (InterruptedException exception) {
-				exception.printStackTrace();
+				wait();
+			} catch (InterruptedException e) {
+				System.out.println("A thread: " + Thread.currentThread().getName() + " não leu a mensagem.");
 			}
 		}
-
-		this.occupied = false;
-
-		if (this.buffer != 0) {
-			System.out.print("\n" + "LEU " + this.buffer + "\n");
+		if (this.threadLeitor < 4) {
+			int msgRecebida = this.mensagem;
+			this.threadLeitor++;
+			System.out.println(nomethread + "-" + "Mensagem recebida: " + msgRecebida);
+		}
+		if (this.threadLeitor == 4) {
+			this.occupied = false;
+			this.threadLeitor = 0;
+			notify();
 		}
 
-		this.buffer = 0;
-
-		System.out.print("\n" + "LEITOR ALTEROU BUFFER PARA : " + this.buffer + "\n");
-
-		notify();
-
-		return this.buffer;
+		return this.mensagem;
 	}
 
 }
