@@ -10,11 +10,13 @@ public class Main {
 	public static void main(String[] args) {
 
 		ExecutorService executar_leitor = Executors.newFixedThreadPool(4);
-		ScheduledExecutorService executar_escritor = Executors.newScheduledThreadPool(1);
+		ScheduledExecutorService executar_escritor = Executors.newScheduledThreadPool(120);
 		Buffer sharedLocation = new ImplementacaoBuffer();
-		try {		
+		try {
+			for (int i = 0; i <= 120; i++) {
+				executar_leitor.execute(new Leitor(sharedLocation));
+			}
 			executar_escritor.scheduleAtFixedRate(new Escritor(sharedLocation), 0, 1, TimeUnit.MILLISECONDS);
-			executar_leitor.execute(new Leitor(sharedLocation));
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		}

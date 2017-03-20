@@ -33,6 +33,8 @@ public class ImplementacaoBuffer implements Buffer {
 			try {
 				if (this.buffer == 0) {
 					wait();
+				} else {
+					notifyAll();
 				}
 			}
 
