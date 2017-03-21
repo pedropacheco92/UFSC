@@ -28,6 +28,7 @@ public class ImplementacaoBuffer implements Buffer {
 		while (!this.occupied) {
 			try {
 				if (this.mensagem == 0) {
+					System.out.println("A thread: " + Thread.currentThread().getName() + " não leu a mensagem.");
 					wait();
 				}
 			} catch (InterruptedException exception) {
