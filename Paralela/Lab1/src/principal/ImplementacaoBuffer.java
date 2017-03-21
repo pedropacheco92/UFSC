@@ -27,23 +27,37 @@ public class ImplementacaoBuffer implements Buffer {
 		String nomethread = Thread.currentThread().getName();
 		while (!this.occupied) {
 			try {
-				wait();
-			} catch (InterruptedException e) {
-				System.out.println("A thread: " + Thread.currentThread().getName() + " não leu a mensagem.");
+				if (this.mensagem == 0) {
+					wait();
+				}
+			} catch (InterruptedException exception) {
+				exception.printStackTrace();
 			}
 		}
-		if (this.threadLeitor < 4) {
-			int msgRecebida = this.mensagem;
-			this.threadLeitor++;
-			System.out.println(nomethread + "-" + "Mensagem recebida: " + msgRecebida);
+
+		this.occupied = false;
+
+		if (this.mensagem != 0) {
+			if (this.threadLeitor < 4) {
+				int msgRecebida = this.mensagem;
+				this.threadLeitor++;
+				System.out.println(nomethread + "-" + "Mensagem recebida: " + msgRecebida);
+			}
+			if (this.threadLeitor == 4) {
+				this.occupied = false;
+				this.threadLeitor = 0;
+				notify();
+			}
+		} else {
+			System.out.println("A thread: " + Thread.currentThread().getName() + " não leu a mensagem.");
 		}
-		if (this.threadLeitor == 4) {
-			this.occupied = false;
-			this.threadLeitor = 0;
-			notify();
-		}
+
+		this.mensagem = 0;
+		System.out.println(nomethread + "-" + "Buffer alterado para 0");
+
+		notify();
 
 		return this.mensagem;
-	}
 
+	}
 }
