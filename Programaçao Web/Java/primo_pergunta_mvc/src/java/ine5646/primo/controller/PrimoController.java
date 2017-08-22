@@ -1,7 +1,10 @@
-package ine5646.primo.servlets;
+package ine5646.primo.controller;
 
+import ine5646.primo.model.PrimoHelper;
+import ine5646.primo.view.PrimoView;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.annotation.PostConstruct;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,8 +16,15 @@ import javax.servlet.http.HttpServletResponse;
  * @author leandro
  */
 @WebServlet(name = "ServletVerificador", urlPatterns = {"/verifique"})
-public class ServletVerificador extends HttpServlet {
-
+public class PrimoController extends HttpServlet {
+    
+    private PrimoView view;
+    
+   @PostConstruct
+   private void initialize() {
+       view = new PrimoView();
+   }
+    
   /**
    * Handles the HTTP
    * <code>GET</code> method.
@@ -25,22 +35,11 @@ public class ServletVerificador extends HttpServlet {
    * @throws IOException if an I/O error occurs
    */
   @Override
-  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
+    
         response.setContentType("text/html;charset=UTF-8");
-    try (PrintWriter out = response.getWriter()) {
-      out.println("<!DOCTYPE html>");
-      out.println("<html>");
-      out.println("<head>");
-      out.println("<title>INE5646 - primo</title>");
-      out.println("</head>");
-      out.println("<body>");
-      out.println("<h1>INE5646 - primo</h1>");
-      out.println(processeNumero(request.getParameter("numero")));
-      out.println("</body>");
-      out.println("</html>");
-    }
-
+        view.render(response.getWriter(), processeNumero(request.getParameter("numero")));
   }
 
 
@@ -59,27 +58,15 @@ public class ServletVerificador extends HttpServlet {
     }
     
     if (value != null) {
-        if (ehPrimo(value)) {
-            msg = "é primo";
-            cor = COR_PRIMO;
-        } else {
+        if (!PrimoHelper.isPrimo(value)) {
             msg = "nao é primo";
             cor = COR_NAO_PRIMO;
+        } else {
+            msg = "é primo";
+            cor = COR_PRIMO;
         }        
     }
-
-    //FIXME implementar
-  
+    
     return sb.append("<h2 style='color : ").append(cor).append("'>").append(numero).append(" : ").append(msg).append("</h2>").toString();
-  }
-
-  // retorna true se num for primo ou false caso contrário.
-    private boolean ehPrimo(long num) {
-        if (num < 2) return false;
-        if (num == 2) return true;
-        if (num % 2 == 0) return false;
-        for (int i = 3; i * i <= num; i += 2)
-            if (num % i == 0) return false;
-        return true;
-    }
+  }  
 }
