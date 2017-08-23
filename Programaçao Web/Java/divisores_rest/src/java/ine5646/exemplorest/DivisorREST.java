@@ -5,6 +5,11 @@
  */
 package ine5646.exemplorest;
 
+import com.google.gson.Gson;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
@@ -12,6 +17,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -19,7 +25,7 @@ import javax.ws.rs.core.MediaType;
  *
  * @author Pedro
  */
-@Path("divisores")
+@Path("divisores/{numero}")
 public class DivisorREST {
 
     @Context
@@ -31,23 +37,14 @@ public class DivisorREST {
     public DivisorREST() {
     }
 
-    /**
-     * Retrieves representation of an instance of ine5646.exemplorest.DivisorREST
-     * @return an instance of java.lang.String
-     */
+    // http://localhost:8080/divisores_rest/webresources/divisores/36
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String getJson() {
-        //TODO return proper representation object
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * PUT method for updating or creating an instance of DivisorREST
-     * @param content representation for the resource
-     */
-    @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void putJson(String content) {
-    }
+    public String divisores(@PathParam("numero") int numero) {
+        List<Integer> listaDivisores = new ArrayList<>();
+        
+        IntStream.range(1, numero + 1).filter(x -> numero % x == 0).forEach(listaDivisores::add);
+        
+        return new Gson().toJson(listaDivisores);
+    }    
 }
