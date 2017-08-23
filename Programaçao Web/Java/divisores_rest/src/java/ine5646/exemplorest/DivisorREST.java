@@ -43,7 +43,7 @@ public class DivisorREST {
     public String divisores(@PathParam("numero") int numero) {
         List<Integer> listaDivisores = new ArrayList<>();
         
-        IntStream.range(1, numero + 1).filter(x -> numero % x == 0).forEach(listaDivisores::add);
+        IntStream.rangeClosed(1, numero).filter(x -> numero % x == 0).forEach(listaDivisores::add);
         
         return new Gson().toJson(listaDivisores);
     }    
