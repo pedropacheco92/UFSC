@@ -7,10 +7,10 @@ import lombok.Getter;
 @Getter
 public enum Valor {
 
-	VAZIO("-"),
-	X("X"),
-	O("O");
-	
-	private String value;
-	
+    VAZIO("-"), 
+    X("X"), 
+    O("O");
+
+    private String value;
+
 }
