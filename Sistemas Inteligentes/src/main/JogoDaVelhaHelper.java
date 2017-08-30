@@ -64,7 +64,6 @@ public class JogoDaVelhaHelper {
     public static boolean ganhou(Valor jogador, Map<Integer, Valor> tabuleiro) {
 	for (List<Integer> l : valoresGanhadores) {
 	    if (l.stream().map(tabuleiro::get).allMatch(jogador::equals)) {
-		System.out.println(l);
 		return true;
 	    }
 	}
