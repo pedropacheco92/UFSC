@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 public class JogoDaVelhaHelper {
 
@@ -69,6 +71,15 @@ public class JogoDaVelhaHelper {
 	}
 
 	return false;
+    }
+    
+    public static List<Integer> casasVazias(Map<Integer, Valor> tabuleiro) {
+    	return tabuleiro
+    			.entrySet()
+    			.stream()
+    			.filter(e -> Valor.VAZIO.equals(e.getValue()))
+    			.map(Entry::getKey)
+    			.collect(Collectors.toList());
     }
 
 }
