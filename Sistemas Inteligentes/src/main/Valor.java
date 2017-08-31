@@ -6,16 +6,14 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum Valor {
-    //@formatter:off
-    VAZIO("-"),
-    X("X"),
-    O("O");
-    //@formatter:on
+	// @formatter:off
+	VAZIO("-"), X("X"), O("O");
+	// @formatter:on
 
-    private String value;
+	private String value;
 
-    public static Valor contrario(Valor v) {
-	return O.equals(v) ? X : O;
-    }
+	public static Valor contrario(Valor v) {
+		return O.equals(v) ? X : O;
+	}
 
 }
