@@ -49,7 +49,7 @@ public class JogoDaVelha {
 		this.turno = this.jogadorVerdadeiro;
 
 		// instancia minimax
-		this.miniMax = new MiniMaxJogoDaVelha(this.jogadorCPU, this.jogadorVerdadeiro, this.turno);
+		this.miniMax = new MiniMaxJogoDaVelha(this.jogadorCPU, this.jogadorVerdadeiro);
 
 		// realiza o jogo
 		jogo();
@@ -64,8 +64,11 @@ public class JogoDaVelha {
 				// .filter(entry ->
 				// Valor.VAZIO.equals(entry.getValue())).findAny().get().getKey();
 
+				this.miniMax.clear();
 				int valor = this.miniMax.minimax(this.tabuleiro, this.turno);
-				this.tabuleiro.replace(valor, this.turno);
+				int melhorJogada = this.miniMax.getJogadas().entrySet().stream().filter(e -> e.getValue().equals(valor)).findAny().get().getKey();
+				System.out.println("@" + melhorJogada);
+				this.tabuleiro.replace(melhorJogada, this.turno);
 				this.view.mostraJogada(getNomeJogador(this.turno), valor,
 						JogoDaVelhaHelper.renderTabuleiro(this.tabuleiro));
 			} else {

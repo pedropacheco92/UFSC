@@ -1,17 +1,23 @@
 package main;
 
 import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import lombok.AllArgsConstructor;
+import lombok.Data;
 
-@AllArgsConstructor
+@Data
 public class MiniMaxJogoDaVelha {
 
-	private Valor jogadorCPU, jogadorVerdadeiro, turno;
+	private final Valor jogadorCPU, jogadorVerdadeiro;
+
+	private Map<Integer, Integer> jogadas;
+
+	public void clear() {
+		this.jogadas = new HashMap<>();
+	}
 
 	public int minimax(Map<Integer, Valor> tabuleiro, Valor jogador) {
 		if (JogoDaVelhaHelper.ganhou(this.jogadorVerdadeiro, tabuleiro)) {
@@ -31,8 +37,6 @@ public class MiniMaxJogoDaVelha {
 			return 0;
 		}
 
-		List<Entry<Integer, Integer>> jogadas = new ArrayList<>();
-
 		for (Integer i : casasVazias) {
 			System.out.println("Casas vazias: " + casasVazias);
 			System.out.println("Casa: " + i);
@@ -40,7 +44,7 @@ public class MiniMaxJogoDaVelha {
 
 			tabuleiro.replace(i, jogador);
 
-			if (this.turno.equals(this.jogadorCPU)) {
+			if (jogador.equals(this.jogadorCPU)) {
 				int result = minimax(tabuleiro, this.jogadorCPU);
 				jogada = new SimpleEntry<>(i, result);
 			} else {
@@ -49,21 +53,30 @@ public class MiniMaxJogoDaVelha {
 			}
 
 			tabuleiro.replace(jogada.getKey(), jogador);
-			jogadas.add(jogada);
+			if (this.jogadas.containsKey(jogada.getKey())) {
+				this.jogadas.computeIfPresent(jogada.getKey(), (k, v) -> {
+					if (v > jogada.getValue()) {
+						return v;
+					}
+					return jogada.getValue();
+				});
+			} else {
+				this.jogadas.put(jogada.getKey(), jogada.getValue());
+			}
+
 		}
 
-		casasVazias.stream().forEach(i -> tabuleiro.replace(i, Valor.VAZIO));
+		casasVazias.stream().forEach(c -> tabuleiro.replace(c, Valor.VAZIO));
 
 		int melhorJogada = 0;
 
 		if (jogador.equals(this.jogadorCPU)) {
-			melhorJogada = jogadas.stream().max((e1, e2) -> Integer.compare(e1.getValue(), e2.getValue())).get().getKey();
+			melhorJogada = this.jogadas.entrySet().stream().map(Entry::getValue).max(Integer::compare).orElse(Integer.MAX_VALUE);
 		} else {
-			melhorJogada = jogadas.stream().min((e1, e2) -> Integer.compare(e1.getValue(), e2.getValue())).get().getKey();
+			melhorJogada = this.jogadas.entrySet().stream().map(Entry::getValue).min(Integer::compare).orElse(Integer.MIN_VALUE);
 		}
 
 		System.out.println("Melhor Jogada: " + melhorJogada);
 		return melhorJogada;
 	}
-
 }
