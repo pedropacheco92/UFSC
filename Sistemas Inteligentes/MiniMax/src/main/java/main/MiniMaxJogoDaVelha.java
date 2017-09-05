@@ -15,24 +15,30 @@ public class MiniMaxJogoDaVelha {
 
 	public int minimax(Map<Integer, Valor> tabuleiro, Valor jogador) {
 		if (JogoDaVelhaHelper.ganhou(this.jogadorVerdadeiro, tabuleiro)) {
+			System.out.println("-10");
 			return -10;
 		}
 
 		if (JogoDaVelhaHelper.ganhou(this.jogadorCPU, tabuleiro)) {
+			System.out.println("10");
 			return 10;
 		}
 
 		List<Integer> casasVazias = JogoDaVelhaHelper.casasVazias(tabuleiro);
 
 		if (casasVazias.isEmpty()) {
+			System.out.println("0");
 			return 0;
 		}
 
 		List<Entry<Integer, Integer>> jogadas = new ArrayList<>();
 
 		for (Integer i : casasVazias) {
-
+			System.out.println("Casas vazias: " + casasVazias);
+			System.out.println("Casa: " + i);
 			Entry<Integer, Integer> jogada;
+
+			tabuleiro.replace(i, jogador);
 
 			if (this.turno.equals(this.jogadorCPU)) {
 				int result = minimax(tabuleiro, this.jogadorCPU);
@@ -46,14 +52,17 @@ public class MiniMaxJogoDaVelha {
 			jogadas.add(jogada);
 		}
 
-		int melhorJogada;
+		casasVazias.stream().forEach(i -> tabuleiro.replace(i, Valor.VAZIO));
+
+		int melhorJogada = 0;
 
 		if (jogador.equals(this.jogadorCPU)) {
-			melhorJogada = jogadas.stream().map(Entry::getValue).max(Integer::compare).get();
+			melhorJogada = jogadas.stream().max((e1, e2) -> Integer.compare(e1.getValue(), e2.getValue())).get().getKey();
 		} else {
-			melhorJogada = jogadas.stream().map(Entry::getValue).min(Integer::compare).get();
+			melhorJogada = jogadas.stream().min((e1, e2) -> Integer.compare(e1.getValue(), e2.getValue())).get().getKey();
 		}
 
+		System.out.println("Melhor Jogada: " + melhorJogada);
 		return melhorJogada;
 	}
 
