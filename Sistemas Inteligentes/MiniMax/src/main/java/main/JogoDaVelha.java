@@ -1,12 +1,11 @@
 package main;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.IntStream;
 
 public class JogoDaVelha {
 
-	private Map<Integer, Valor> tabuleiro = new HashMap<>();
+	private HashMap<Integer, Valor> tabuleiro = new HashMap<>();
 
 	private Valor jogadorCPU, jogadorVerdadeiro, turno;
 
@@ -64,11 +63,9 @@ public class JogoDaVelha {
 				// .filter(entry ->
 				// Valor.VAZIO.equals(entry.getValue())).findAny().get().getKey();
 
-				this.miniMax.clear();
-				int valor = this.miniMax.minimax(this.tabuleiro, this.turno);
-				int melhorJogada = this.miniMax.getJogadas().entrySet().stream().filter(e -> e.getValue().equals(valor)).findAny().get().getKey();
-				System.out.println("@" + melhorJogada);
-				this.tabuleiro.replace(melhorJogada, this.turno);
+				Integer valor = this.miniMax.minimax(this.tabuleiro, this.turno).getKey();
+				System.out.println("@" + valor);
+				this.tabuleiro.replace(valor, this.turno);
 				this.view.mostraJogada(getNomeJogador(this.turno), valor,
 						JogoDaVelhaHelper.renderTabuleiro(this.tabuleiro));
 			} else {

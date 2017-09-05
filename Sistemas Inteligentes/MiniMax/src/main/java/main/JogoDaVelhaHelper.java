@@ -2,10 +2,13 @@ package main;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.SerializationUtils;
 
 public class JogoDaVelhaHelper {
 
@@ -25,33 +28,14 @@ public class JogoDaVelhaHelper {
 
 	public static String renderTabuleiro(Map<Integer, Valor> valores) {
 		StringBuilder builder = new StringBuilder();
-	//@formatter:off
-	builder.append(" ")
-		.append(getValor(0, valores.get(0)))
-		.append(" | ")
-		.append(getValor(1, valores.get(1)))
-		.append(" | ")
-		.append(getValor(2, valores.get(2)))
-		.append(" \n")
-		.append("-----------")
-		.append("\n")
-		.append(" ")
-		.append(getValor(3, valores.get(3)))
-		.append(" | ")
-		.append(getValor(4, valores.get(4)))
-		.append(" | ")
-		.append(getValor(5, valores.get(5)))
-		.append(" \n")
-		.append("-----------")
-		.append("\n")
-		.append(" ")
-		.append(getValor(6, valores.get(6)))
-		.append(" | ")
-		.append(getValor(7, valores.get(7)))
-		.append(" | ")
-		.append(getValor(8, valores.get(8)))
-		.append(" \n");
-	//@formatter:on
+		// @formatter:off
+		builder.append(" ").append(getValor(0, valores.get(0))).append(" | ").append(getValor(1, valores.get(1)))
+				.append(" | ").append(getValor(2, valores.get(2))).append(" \n").append("-----------").append("\n")
+				.append(" ").append(getValor(3, valores.get(3))).append(" | ").append(getValor(4, valores.get(4)))
+				.append(" | ").append(getValor(5, valores.get(5))).append(" \n").append("-----------").append("\n")
+				.append(" ").append(getValor(6, valores.get(6))).append(" | ").append(getValor(7, valores.get(7)))
+				.append(" | ").append(getValor(8, valores.get(8))).append(" \n");
+		// @formatter:on
 		return builder.toString();
 	}
 
@@ -74,14 +58,15 @@ public class JogoDaVelhaHelper {
 	}
 
 	public static List<Integer> casasVazias(Map<Integer, Valor> tabuleiro) {
-		//@formatter:off
-    	return tabuleiro
-    			.entrySet()
-    			.stream()
-    			.filter(e -> Valor.VAZIO.equals(e.getValue()))
-    			.map(Entry::getKey)
-    			.collect(Collectors.toList());
-    	//@formatter:on
+		// @formatter:off
+		return tabuleiro.entrySet().stream().filter(e -> Valor.VAZIO.equals(e.getValue())).map(Entry::getKey)
+				.collect(Collectors.toList());
+		// @formatter:on
+	}
+
+	public static HashMap<Integer, Valor> clone(HashMap<Integer, Valor> map) {
+		Clone c = new Clone(map);
+		return SerializationUtils.clone(c).getMap();
 	}
 
 }

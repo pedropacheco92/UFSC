@@ -1,10 +1,8 @@
 package main;
 
-import java.util.AbstractMap.SimpleEntry;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import lombok.Data;
 
@@ -13,67 +11,56 @@ public class MiniMaxJogoDaVelha {
 
 	private final Valor jogadorCPU, jogadorVerdadeiro;
 
-	private Map<Integer, Integer> jogadas;
-
-	public void clear() {
-		this.jogadas = new HashMap<>();
-	}
-
-	public int minimax(Map<Integer, Valor> tabuleiro, Valor jogador) {
+	// jogada/valor
+	public MiniMaxEntry minimax(HashMap<Integer, Valor> t, Valor jogador) {
+		HashMap<Integer, Valor> tabuleiro = JogoDaVelhaHelper.clone(t);
+		System.out.println("minimax de: " + jogador.getValue() + " e: " + tabuleiro);
 		if (JogoDaVelhaHelper.ganhou(this.jogadorVerdadeiro, tabuleiro)) {
 			System.out.println("-10");
-			return -10;
+			return new MiniMaxEntry(null, -10);
 		}
 
 		if (JogoDaVelhaHelper.ganhou(this.jogadorCPU, tabuleiro)) {
 			System.out.println("10");
-			return 10;
+			return new MiniMaxEntry(null, 10);
 		}
 
 		List<Integer> casasVazias = JogoDaVelhaHelper.casasVazias(tabuleiro);
 
 		if (casasVazias.isEmpty()) {
 			System.out.println("0");
-			return 0;
+			return new MiniMaxEntry(null, 0);
 		}
+
+		List<MiniMaxEntry> jogadas = new ArrayList<>();
 
 		for (Integer i : casasVazias) {
 			System.out.println("Casas vazias: " + casasVazias);
 			System.out.println("Casa: " + i);
-			Entry<Integer, Integer> jogada;
+			MiniMaxEntry jogada;
 
 			tabuleiro.replace(i, jogador);
 
 			if (jogador.equals(this.jogadorCPU)) {
-				int result = minimax(tabuleiro, this.jogadorCPU);
-				jogada = new SimpleEntry<>(i, result);
+				MiniMaxEntry result = minimax(tabuleiro, this.jogadorVerdadeiro);
+				jogada = new MiniMaxEntry(i, result.getValue());
 			} else {
-				int result = minimax(tabuleiro, this.jogadorVerdadeiro);
-				jogada = new SimpleEntry<>(i, result);
+				MiniMaxEntry result = minimax(tabuleiro, this.jogadorCPU);
+				jogada = new MiniMaxEntry(i, result.getValue());
 			}
 
 			tabuleiro.replace(jogada.getKey(), jogador);
-			if (this.jogadas.containsKey(jogada.getKey())) {
-				this.jogadas.computeIfPresent(jogada.getKey(), (k, v) -> {
-					if (v > jogada.getValue()) {
-						return v;
-					}
-					return jogada.getValue();
-				});
-			} else {
-				this.jogadas.put(jogada.getKey(), jogada.getValue());
-			}
-
+			jogadas.add(jogada);
 		}
 
 		casasVazias.stream().forEach(c -> tabuleiro.replace(c, Valor.VAZIO));
-
-		int melhorJogada = 0;
+		System.out.println("Jogadas: " + jogadas);
+		MiniMaxEntry melhorJogada;
 
 		if (jogador.equals(this.jogadorCPU)) {
-			melhorJogada = this.jogadas.entrySet().stream().map(Entry::getValue).max(Integer::compare).orElse(Integer.MAX_VALUE);
+			melhorJogada = jogadas.stream().max(MiniMaxEntry::compareTo).get();
 		} else {
-			melhorJogada = this.jogadas.entrySet().stream().map(Entry::getValue).min(Integer::compare).orElse(Integer.MIN_VALUE);
+			melhorJogada = jogadas.stream().min(MiniMaxEntry::compareTo).get();
 		}
 
 		System.out.println("Melhor Jogada: " + melhorJogada);
