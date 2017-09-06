@@ -13,8 +13,9 @@ public class JogoDaVelha {
 
 	private MiniMaxJogoDaVelha miniMax;
 
-	public JogoDaVelha() {
+	public JogoDaVelha(String[] agrs) {
 		this.view = new JogoDaVelhaView(this::onValorSelecionado, this::onCasaSelecionada);
+		this.miniMax = new MiniMaxJogoDaVelha(agrs);
 		inicioJogo();
 	}
 
@@ -47,8 +48,9 @@ public class JogoDaVelha {
 		// seta o jogador verdadeiro como jogador inicial
 		this.turno = this.jogadorVerdadeiro;
 
-		// instancia minimax
-		this.miniMax = new MiniMaxJogoDaVelha(this.jogadorCPU, this.jogadorVerdadeiro);
+		// seta os jogadores no MiniMax
+		this.miniMax.setJogadorCPU(this.jogadorCPU);
+		this.miniMax.setJogadorVerdadeiro(this.jogadorVerdadeiro);
 
 		// realiza o jogo
 		jogo();
@@ -59,12 +61,7 @@ public class JogoDaVelha {
 		while (!this.tabuleiro.values().stream().noneMatch(Valor.VAZIO::equals)) {
 			// se o turno for do jogador cpu, pega uma casa aleatoria
 			if (this.jogadorCPU.equals(this.turno)) {
-				// Integer valor = this.tabuleiro.entrySet().parallelStream()
-				// .filter(entry ->
-				// Valor.VAZIO.equals(entry.getValue())).findAny().get().getKey();
-
 				Integer valor = this.miniMax.minimax(this.tabuleiro, this.turno).getKey();
-				System.out.println("@" + valor);
 				this.tabuleiro.replace(valor, this.turno);
 				this.view.mostraJogada(getNomeJogador(this.turno), valor,
 						JogoDaVelhaHelper.renderTabuleiro(this.tabuleiro));

@@ -1,42 +1,50 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Setter
+@NoArgsConstructor
 public class MiniMaxJogoDaVelha {
 
-	private final Valor jogadorCPU, jogadorVerdadeiro;
+	private Valor jogadorCPU, jogadorVerdadeiro;
+
+	private boolean showPrints;
+
+	public MiniMaxJogoDaVelha(String[] agrs) {
+		this.showPrints = Arrays.asList(agrs).stream().filter(s -> s.contains("debug")).findAny().isPresent();
+	}
 
 	// jogada/valor
-	public MiniMaxEntry minimax(HashMap<Integer, Valor> t, Valor jogador) {
-		HashMap<Integer, Valor> tabuleiro = JogoDaVelhaHelper.clone(t);
-		System.out.println("minimax de: " + jogador.getValue() + " e: " + tabuleiro);
+	public MiniMaxEntry minimax(HashMap<Integer, Valor> tabuleiro, Valor jogador) {
+		print("minimax de: " + jogador.getValue() + " e: " + tabuleiro);
 		if (JogoDaVelhaHelper.ganhou(this.jogadorVerdadeiro, tabuleiro)) {
-			System.out.println("-10");
+			print("-10");
 			return new MiniMaxEntry(null, -10);
 		}
 
 		if (JogoDaVelhaHelper.ganhou(this.jogadorCPU, tabuleiro)) {
-			System.out.println("10");
+			print("10");
 			return new MiniMaxEntry(null, 10);
 		}
 
 		List<Integer> casasVazias = JogoDaVelhaHelper.casasVazias(tabuleiro);
 
 		if (casasVazias.isEmpty()) {
-			System.out.println("0");
+			print("0");
 			return new MiniMaxEntry(null, 0);
 		}
 
 		List<MiniMaxEntry> jogadas = new ArrayList<>();
 
 		for (Integer i : casasVazias) {
-			System.out.println("Casas vazias: " + casasVazias);
-			System.out.println("Casa: " + i);
+			print("Casas vazias: " + casasVazias);
+			print("Casa: " + i);
 			MiniMaxEntry jogada;
 
 			tabuleiro.replace(i, jogador);
@@ -49,12 +57,12 @@ public class MiniMaxJogoDaVelha {
 				jogada = new MiniMaxEntry(i, result.getValue());
 			}
 
-			tabuleiro.replace(jogada.getKey(), jogador);
+			tabuleiro.replace(i, Valor.VAZIO);
 			jogadas.add(jogada);
 		}
 
 		casasVazias.stream().forEach(c -> tabuleiro.replace(c, Valor.VAZIO));
-		System.out.println("Jogadas: " + jogadas);
+		print("Jogadas: " + jogadas);
 		MiniMaxEntry melhorJogada;
 
 		if (jogador.equals(this.jogadorCPU)) {
@@ -63,7 +71,14 @@ public class MiniMaxJogoDaVelha {
 			melhorJogada = jogadas.stream().min(MiniMaxEntry::compareTo).get();
 		}
 
-		System.out.println("Melhor Jogada: " + melhorJogada);
+		print("Melhor Jogada: " + melhorJogada);
 		return melhorJogada;
 	}
+
+	private void print(String s) {
+		if (this.showPrints) {
+			System.out.println(s);
+		}
+	}
+
 }

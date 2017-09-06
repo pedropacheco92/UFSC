@@ -2,13 +2,10 @@ package main;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
-
-import org.apache.commons.lang3.SerializationUtils;
 
 public class JogoDaVelhaHelper {
 
@@ -63,10 +60,4 @@ public class JogoDaVelhaHelper {
 				.collect(Collectors.toList());
 		// @formatter:on
 	}
-
-	public static HashMap<Integer, Valor> clone(HashMap<Integer, Valor> map) {
-		Clone c = new Clone(map);
-		return SerializationUtils.clone(c).getMap();
-	}
-
 }

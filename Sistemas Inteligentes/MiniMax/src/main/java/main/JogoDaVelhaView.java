@@ -49,9 +49,9 @@ public class JogoDaVelhaView {
 	}
 
 	public void mostraJogada(String nomeJogador, Integer v, String tabuleiro) {
-		System.out.println("\n########################################\n");
 		System.out.println("Jogador " + nomeJogador + " jogou em: " + v + "\n");
 		System.out.println(tabuleiro);
+		System.out.println("\n########################################\n");
 	}
 
 	public void mostraVenceu(String nomeJogador) {
