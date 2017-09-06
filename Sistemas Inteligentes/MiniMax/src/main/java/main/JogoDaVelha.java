@@ -1,7 +1,11 @@
 package main;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
+
+import org.apache.commons.lang3.time.StopWatch;
 
 public class JogoDaVelha {
 
@@ -13,9 +17,11 @@ public class JogoDaVelha {
 
 	private MiniMaxJogoDaVelha miniMax;
 
+	private boolean debug;
+
 	public JogoDaVelha(String[] agrs) {
+		this.debug = Arrays.asList(agrs).stream().filter(s -> s.contains("debug")).findAny().isPresent();
 		this.view = new JogoDaVelhaView(this::onValorSelecionado, this::onCasaSelecionada);
-		this.miniMax = new MiniMaxJogoDaVelha(agrs);
 		inicioJogo();
 	}
 
@@ -25,7 +31,7 @@ public class JogoDaVelha {
 			this.view.selecionaPosicao(this.turno.getValue());
 		} else {
 			this.tabuleiro.replace(v, this.turno);
-			this.view.mostraJogada(getNomeJogador(this.turno), v, JogoDaVelhaHelper.renderTabuleiro(this.tabuleiro));
+			this.view.mostraJogada(getNomeJogador(this.turno), v, JogoDaVelhaHelper.renderTabuleiro(this.tabuleiro), 0);
 		}
 	}
 
@@ -48,9 +54,8 @@ public class JogoDaVelha {
 		// seta o jogador verdadeiro como jogador inicial
 		this.turno = this.jogadorVerdadeiro;
 
-		// seta os jogadores no MiniMax
-		this.miniMax.setJogadorCPU(this.jogadorCPU);
-		this.miniMax.setJogadorVerdadeiro(this.jogadorVerdadeiro);
+		// inicializa Minimax
+		this.miniMax = new MiniMaxJogoDaVelha(this.jogadorCPU, this.jogadorVerdadeiro, this.debug);
 
 		// realiza o jogo
 		jogo();
@@ -61,10 +66,13 @@ public class JogoDaVelha {
 		while (!this.tabuleiro.values().stream().noneMatch(Valor.VAZIO::equals)) {
 			// se o turno for do jogador cpu, pega uma casa aleatoria
 			if (this.jogadorCPU.equals(this.turno)) {
+				StopWatch stopWatch = new StopWatch();
+				stopWatch.start();
 				Integer valor = this.miniMax.minimax(this.tabuleiro, this.turno).getKey();
+				stopWatch.stop();
 				this.tabuleiro.replace(valor, this.turno);
 				this.view.mostraJogada(getNomeJogador(this.turno), valor,
-						JogoDaVelhaHelper.renderTabuleiro(this.tabuleiro));
+						JogoDaVelhaHelper.renderTabuleiro(this.tabuleiro), stopWatch.getTime(TimeUnit.MILLISECONDS));
 			} else {
 				// se nao é o turno do verdadeiro e seleciona um valor
 				this.view.selecionaPosicao(this.turno.getValue());
@@ -86,7 +94,8 @@ public class JogoDaVelha {
 	private Integer valorOk(String v) {
 		try {
 			int valor = Integer.valueOf(v);
-			// se o valor for entre 0 e 8 e não estiver sido selecionado ele está ok, senao
+			// se o valor for entre 0 e 8 e não estiver sido selecionado ele está ok,
+			// senao
 			// volta nulo
 			if (valor >= 0 && valor <= 8 && Valor.VAZIO.equals(this.tabuleiro.get(valor))) {
 				return valor;

@@ -1,24 +1,17 @@
 package main;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
 
-@Setter
-@NoArgsConstructor
+@AllArgsConstructor
 public class MiniMaxJogoDaVelha {
 
 	private Valor jogadorCPU, jogadorVerdadeiro;
 
-	private boolean showPrints;
-
-	public MiniMaxJogoDaVelha(String[] agrs) {
-		this.showPrints = Arrays.asList(agrs).stream().filter(s -> s.contains("debug")).findAny().isPresent();
-	}
+	private boolean debug;
 
 	// jogada/valor
 	public MiniMaxEntry minimax(HashMap<Integer, Valor> tabuleiro, Valor jogador) {
@@ -76,7 +69,7 @@ public class MiniMaxJogoDaVelha {
 	}
 
 	private void print(String s) {
-		if (this.showPrints) {
+		if (this.debug) {
 			System.out.println(s);
 		}
 	}

@@ -48,8 +48,9 @@ public class JogoDaVelhaView {
 		this.posicaoListener.accept(this.sc.nextLine());
 	}
 
-	public void mostraJogada(String nomeJogador, Integer v, String tabuleiro) {
+	public void mostraJogada(String nomeJogador, Integer v, String tabuleiro, long l) {
 		System.out.println("Jogador " + nomeJogador + " jogou em: " + v + "\n");
+		System.out.println("Tempo da jogada: " + l + " ms");
 		System.out.println(tabuleiro);
 		System.out.println("\n########################################\n");
 	}
