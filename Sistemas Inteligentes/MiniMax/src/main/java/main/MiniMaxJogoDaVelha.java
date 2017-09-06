@@ -14,7 +14,7 @@ public class MiniMaxJogoDaVelha {
 	private boolean debug;
 
 	// jogada/valor
-	public MiniMaxEntry minimax(HashMap<Integer, Valor> tabuleiro, Valor jogador) {
+	public MiniMaxEntry minimax(HashMap<Integer, Valor> tabuleiro, Valor jogador, Integer alfa, Integer beta) {
 		print("minimax de: " + jogador.getValue() + " e: " + tabuleiro);
 		if (JogoDaVelhaHelper.ganhou(this.jogadorVerdadeiro, tabuleiro)) {
 			print("-10");
@@ -43,15 +43,26 @@ public class MiniMaxJogoDaVelha {
 			tabuleiro.replace(i, jogador);
 
 			if (jogador.equals(this.jogadorCPU)) {
-				MiniMaxEntry result = minimax(tabuleiro, this.jogadorVerdadeiro);
+				MiniMaxEntry result = minimax(tabuleiro, this.jogadorVerdadeiro, alfa, beta);
+				if (result.getValue() > alfa) {
+					alfa = result.getValue();
+				}
 				jogada = new MiniMaxEntry(i, result.getValue());
 			} else {
-				MiniMaxEntry result = minimax(tabuleiro, this.jogadorCPU);
+				MiniMaxEntry result = minimax(tabuleiro, this.jogadorCPU, alfa, beta);
+				if (result.getValue() < beta) {
+					alfa = result.getValue();
+				}
 				jogada = new MiniMaxEntry(i, result.getValue());
 			}
 
 			tabuleiro.replace(i, Valor.VAZIO);
 			jogadas.add(jogada);
+
+			if (alfa >= beta) {
+				System.out.println("BREAK");
+				break;
+			}
 		}
 
 		casasVazias.stream().forEach(c -> tabuleiro.replace(c, Valor.VAZIO));
