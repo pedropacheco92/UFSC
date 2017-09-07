@@ -69,7 +69,7 @@ public class JogoDaVelha {
 				StopWatch stopWatch = new StopWatch();
 				stopWatch.start();
 				Integer valor = this.miniMax.minimax(this.tabuleiro, this.turno, Integer.MIN_VALUE, Integer.MAX_VALUE)
-						.getKey();
+						.getJogada();
 				stopWatch.stop();
 				this.tabuleiro.replace(valor, this.turno);
 				this.view.mostraJogada(getNomeJogador(this.turno), valor,

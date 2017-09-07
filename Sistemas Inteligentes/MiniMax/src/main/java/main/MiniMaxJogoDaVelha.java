@@ -13,66 +13,84 @@ public class MiniMaxJogoDaVelha {
 
 	private boolean debug;
 
-	// jogada/valor
-	public MiniMaxEntry minimax(HashMap<Integer, Valor> tabuleiro, Valor jogador, Integer alfa, Integer beta) {
+	// jogada/pontuacao
+	public Jogada minimax(HashMap<Integer, Valor> tabuleiro, Valor jogador, Integer alfa, Integer beta) {
 		print("minimax de: " + jogador.getValue() + " e: " + tabuleiro);
+
+		// verifica os estados terminais, se ganhou perdeu ou empatou
+		// se perdeu retorna -10
 		if (JogoDaVelhaHelper.ganhou(this.jogadorVerdadeiro, tabuleiro)) {
 			print("-10");
-			return new MiniMaxEntry(null, -10);
+			return new Jogada(null, -10);
 		}
 
+		// se ganhou retorna 10
 		if (JogoDaVelhaHelper.ganhou(this.jogadorCPU, tabuleiro)) {
 			print("10");
-			return new MiniMaxEntry(null, 10);
+			return new Jogada(null, 10);
 		}
 
 		List<Integer> casasVazias = JogoDaVelhaHelper.casasVazias(tabuleiro);
 
+		// se empatou retorna 0
 		if (casasVazias.isEmpty()) {
 			print("0");
-			return new MiniMaxEntry(null, 0);
+			return new Jogada(null, 0);
 		}
 
-		List<MiniMaxEntry> jogadas = new ArrayList<>();
+		// lista para adicionar todas as jogadas possíveis
+		List<Jogada> jogadas = new ArrayList<>();
 
+		// para cada casa vazia...
 		for (Integer i : casasVazias) {
 			print("Casas vazias: " + casasVazias);
 			print("Casa: " + i);
-			MiniMaxEntry jogada;
+			Jogada jogada;
 
+			// coloca no tabuleiro como possivel jogada
 			tabuleiro.replace(i, jogador);
 
+			// pega o resultado do minimax para aquela jogada, que dependendo do jogador do
+			// turno
 			if (jogador.equals(this.jogadorCPU)) {
-				MiniMaxEntry result = minimax(tabuleiro, this.jogadorVerdadeiro, alfa, beta);
-				if (result.getValue() > alfa) {
-					alfa = result.getValue();
+				Jogada result = minimax(tabuleiro, this.jogadorVerdadeiro, alfa, beta);
+				if (result.getPontuacao() > alfa) {
+					alfa = result.getPontuacao();
 				}
-				jogada = new MiniMaxEntry(i, result.getValue());
+				jogada = new Jogada(i, result.getPontuacao());
 			} else {
-				MiniMaxEntry result = minimax(tabuleiro, this.jogadorCPU, alfa, beta);
-				if (result.getValue() < beta) {
-					beta = result.getValue();
+				Jogada result = minimax(tabuleiro, this.jogadorCPU, alfa, beta);
+				if (result.getPontuacao() < beta) {
+					beta = result.getPontuacao();
 				}
-				jogada = new MiniMaxEntry(i, result.getValue());
+				jogada = new Jogada(i, result.getPontuacao());
 			}
 
+			// reseta a jogada no tabuleiro
 			tabuleiro.replace(i, Valor.VAZIO);
+
+			// adiciona a possivel jogada na lista de jogadas
 			jogadas.add(jogada);
 
+			// realiza a poda alfa beta
 			if (alfa >= beta) {
 				print("podou, alfa: " + alfa + ", beta: " + beta);
 				break;
 			}
 		}
 
+		// reseta o tabuleiro para o estado original
 		casasVazias.stream().forEach(c -> tabuleiro.replace(c, Valor.VAZIO));
 		print("Jogadas: " + jogadas);
-		MiniMaxEntry melhorJogada;
+		Jogada melhorJogada;
 
+		// se for o turno do computador, retorna a melhor jogada como sendo a de MAIOR
+		// pontuação
 		if (jogador.equals(this.jogadorCPU)) {
-			melhorJogada = jogadas.stream().max(MiniMaxEntry::compareTo).get();
+			melhorJogada = jogadas.stream().max(Jogada::compareTo).get();
 		} else {
-			melhorJogada = jogadas.stream().min(MiniMaxEntry::compareTo).get();
+			// se for o turno do oponente, retorna a jogada de MENOR pontuação
+			melhorJogada = jogadas.stream().min(Jogada::compareTo).get();
 		}
 
 		print("Melhor Jogada: " + melhorJogada);
