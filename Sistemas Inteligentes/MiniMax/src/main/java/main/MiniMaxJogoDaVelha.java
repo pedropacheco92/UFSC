@@ -51,7 +51,7 @@ public class MiniMaxJogoDaVelha {
 			} else {
 				MiniMaxEntry result = minimax(tabuleiro, this.jogadorCPU, alfa, beta);
 				if (result.getValue() < beta) {
-					alfa = result.getValue();
+					beta = result.getValue();
 				}
 				jogada = new MiniMaxEntry(i, result.getValue());
 			}
@@ -60,7 +60,7 @@ public class MiniMaxJogoDaVelha {
 			jogadas.add(jogada);
 
 			if (alfa >= beta) {
-				System.out.println("BREAK");
+				print("podou, alfa: " + alfa + ", beta: " + beta);
 				break;
 			}
 		}
