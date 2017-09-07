@@ -50,7 +50,7 @@ public class JogoDaVelhaView {
 
 	public void mostraJogada(String nomeJogador, Integer v, String tabuleiro, long l) {
 		System.out.println("Jogador " + nomeJogador + " jogou em: " + v + "\n");
-		System.out.println("Tempo da jogada: " + l + " ms");
+		System.out.println("Tempo da jogada: " + l + " ms\n");
 		System.out.println(tabuleiro);
 		System.out.println("\n########################################\n");
 	}

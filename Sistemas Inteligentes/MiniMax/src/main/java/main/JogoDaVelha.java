@@ -68,7 +68,7 @@ public class JogoDaVelha {
 			if (this.jogadorCPU.equals(this.turno)) {
 				StopWatch stopWatch = new StopWatch();
 				stopWatch.start();
-				Integer valor = this.miniMax.minimax(this.tabuleiro, this.turno).getKey();
+				Integer valor = this.miniMax.minimax(this.tabuleiro, this.turno).getJogada();
 				stopWatch.stop();
 				this.tabuleiro.replace(valor, this.turno);
 				this.view.mostraJogada(getNomeJogador(this.turno), valor,
