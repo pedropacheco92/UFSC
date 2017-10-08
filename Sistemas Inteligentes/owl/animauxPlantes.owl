@@ -1,0 +1,230 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE Ontology [
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY xml "http://www.w3.org/XML/1998/namespace" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+]>
+
+
+<Ontology xmlns="http://www.w3.org/2002/07/owl#"
+     xml:base="http://www.semanticweb.org/romane/ontologies/2017/8/AnimauxPlantes.owl"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     ontologyIRI="http://www.semanticweb.org/romane/ontologies/2017/8/AnimauxPlantes.owl">
+    <Prefix name="rdf" IRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+    <Prefix name="rdfs" IRI="http://www.w3.org/2000/01/rdf-schema#"/>
+    <Prefix name="xsd" IRI="http://www.w3.org/2001/XMLSchema#"/>
+    <Prefix name="owl" IRI="http://www.w3.org/2002/07/owl#"/>
+    <Declaration>
+        <Class IRI="#Animal"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Arbre"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Branche"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Carnivore"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Feuille"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Girafe"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Herbivore"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Lion"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Plante"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#PlanteSavoureuse"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#mange"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#mangePar"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#partieDe"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Batavia"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#LaPalme"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Leo"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Olivier"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Rose-Marie"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Sophie"/>
+    </Declaration>
+    <SubClassOf>
+        <Class IRI="#Arbre"/>
+        <Class IRI="#Plante"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Branche"/>
+        <ObjectAllValuesFrom>
+            <ObjectProperty IRI="#partieDe"/>
+            <Class IRI="#Arbre"/>
+        </ObjectAllValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Carnivore"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#Animal"/>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#mange"/>
+                <Class IRI="#Animal"/>
+            </ObjectSomeValuesFrom>
+        </ObjectIntersectionOf>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Feuille"/>
+        <ObjectAllValuesFrom>
+            <ObjectProperty IRI="#partieDe"/>
+            <Class IRI="#Branche"/>
+        </ObjectAllValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Girafe"/>
+        <Class IRI="#Herbivore"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Girafe"/>
+        <ObjectAllValuesFrom>
+            <ObjectProperty IRI="#mange"/>
+            <Class IRI="#Feuille"/>
+        </ObjectAllValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Herbivore"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#Animal"/>
+            <ObjectAllValuesFrom>
+                <ObjectProperty IRI="#mange"/>
+                <ObjectUnionOf>
+                    <Class IRI="#Plante"/>
+                    <ObjectAllValuesFrom>
+                        <ObjectProperty IRI="#partieDe"/>
+                        <Class IRI="#Plante"/>
+                    </ObjectAllValuesFrom>
+                </ObjectUnionOf>
+            </ObjectAllValuesFrom>
+        </ObjectIntersectionOf>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Lion"/>
+        <Class IRI="#Carnivore"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Lion"/>
+        <ObjectAllValuesFrom>
+            <ObjectProperty IRI="#mange"/>
+            <Class IRI="#Herbivore"/>
+        </ObjectAllValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#PlanteSavoureuse"/>
+        <Class IRI="#Plante"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#PlanteSavoureuse"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#mangePar"/>
+            <Class IRI="#Carnivore"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#PlanteSavoureuse"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#mangePar"/>
+            <Class IRI="#Herbivore"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <DisjointClasses>
+        <Class IRI="#Animal"/>
+        <Class IRI="#Plante"/>
+    </DisjointClasses>
+    <ClassAssertion>
+        <Class IRI="#Feuille"/>
+        <NamedIndividual IRI="#Batavia"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Branche"/>
+        <NamedIndividual IRI="#LaPalme"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Lion"/>
+        <NamedIndividual IRI="#Leo"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Arbre"/>
+        <NamedIndividual IRI="#Olivier"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#PlanteSavoureuse"/>
+        <NamedIndividual IRI="#Rose-Marie"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Girafe"/>
+        <NamedIndividual IRI="#Sophie"/>
+    </ClassAssertion>
+    <DifferentIndividuals>
+        <NamedIndividual IRI="#Batavia"/>
+        <NamedIndividual IRI="#LaPalme"/>
+    </DifferentIndividuals>
+    <DifferentIndividuals>
+        <NamedIndividual IRI="#Batavia"/>
+        <NamedIndividual IRI="#LaPalme"/>
+        <NamedIndividual IRI="#Leo"/>
+        <NamedIndividual IRI="#Olivier"/>
+        <NamedIndividual IRI="#Rose-Marie"/>
+        <NamedIndividual IRI="#Sophie"/>
+    </DifferentIndividuals>
+    <DifferentIndividuals>
+        <NamedIndividual IRI="#Batavia"/>
+        <NamedIndividual IRI="#Olivier"/>
+        <NamedIndividual IRI="#Rose-Marie"/>
+        <NamedIndividual IRI="#Sophie"/>
+    </DifferentIndividuals>
+    <InverseObjectProperties>
+        <ObjectProperty IRI="#mangePar"/>
+        <ObjectProperty IRI="#mange"/>
+    </InverseObjectProperties>
+    <TransitiveObjectProperty>
+        <ObjectProperty IRI="#partieDe"/>
+    </TransitiveObjectProperty>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#mange"/>
+        <Class IRI="#Animal"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#mangePar"/>
+        <Class IRI="#Animal"/>
+    </ObjectPropertyDomain>
+</Ontology>
+
+
+
+<!-- Generated by the OWL API (version 3.5.1) http://owlapi.sourceforge.net -->
+
