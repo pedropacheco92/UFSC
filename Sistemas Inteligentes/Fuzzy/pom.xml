@@ -11,6 +11,13 @@
 	    <artifactId>robocode.api</artifactId>
 	    <version>1.9.2.1</version>
 	</dependency>  
+	<dependency>
+	    <groupId>net.sourceforge.jfuzzylogic</groupId>
+	    <artifactId>jFuzzyLogic</artifactId>
+	    <version>1.2.1</version>
+	    <scope>system</scope>
+	    <systemPath>${project.basedir}/src/main/resources/jFuzzyLogic.jar</systemPath>
+	</dependency>
   </dependencies>
   
 </project>
