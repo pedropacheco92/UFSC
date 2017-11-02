@@ -16,7 +16,16 @@
 	    <artifactId>jFuzzyLogic</artifactId>
 	    <version>1.2.1</version>
 	    <scope>system</scope>
-	    <systemPath>${project.basedir}/src/main/resources/jFuzzyLogic.jar</systemPath>
+	    <systemPath>${project.basedir}/lib/jFuzzyLogic.jar</systemPath>
+	    <type>jar</type>
+	</dependency>
+	<dependency>
+	    <groupId>edu.gmu.cs</groupId>
+	    <artifactId>mason</artifactId>
+	    <version>19.0</version>
+	    <scope>system</scope>
+	    <systemPath>${project.basedir}/lib/mason.19.jar</systemPath>
+	    <type>jar</type>
 	</dependency>
   </dependencies>
   

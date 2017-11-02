@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="Fuzzy/src/main/java"/>
+	<classpathentry kind="src" path="MiniMax/src/main/java"/>
+	<classpathentry kind="src" path="owl/src"/>
+	<classpathentry kind="lib" path="Fuzzy/lib/jFuzzyLogic.jar"/>
+	<classpathentry kind="lib" path="Fuzzy/lib/mason.19.jar"/>
+	<classpathentry kind="lib" path="Fuzzy/target/fuzzy-0.0.1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="owl/jar/org.protege.editor.owl.codegeneration-1.0.0.jar"/>
+	<classpathentry kind="lib" path="owl/jar/org.semanticweb.owl.owlapi-3.4.4.jar"/>
+	<classpathentry kind="output" path="Fuzzy/target/classes"/>
+</classpath>
