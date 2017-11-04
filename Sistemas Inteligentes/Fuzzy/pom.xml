@@ -5,12 +5,7 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>Trabalho Fuzzy</name>
   
-  <dependencies>
-	<dependency>
-	    <groupId>net.sf.robocode</groupId>
-	    <artifactId>robocode.api</artifactId>
-	    <version>1.9.2.1</version>
-	</dependency>  
+  <dependencies> 
 	<dependency>
 	    <groupId>net.sourceforge.jfuzzylogic</groupId>
 	    <artifactId>jFuzzyLogic</artifactId>
@@ -18,15 +13,7 @@
 	    <scope>system</scope>
 	    <systemPath>${project.basedir}/lib/jFuzzyLogic.jar</systemPath>
 	    <type>jar</type>
-	</dependency>
-	<dependency>
-	    <groupId>edu.gmu.cs</groupId>
-	    <artifactId>mason</artifactId>
-	    <version>19.0</version>
-	    <scope>system</scope>
-	    <systemPath>${project.basedir}/lib/mason.19.jar</systemPath>
-	    <type>jar</type>
-	</dependency>
+	</dependency>	
   </dependencies>
   
 </project>	

@@ -5,7 +5,7 @@ import javax.swing.JFrame;
 @SuppressWarnings("serial")
 public class PacMan extends JFrame {
 
-	public PacMan()	{
+	public PacMan() {
 		add(new Board());
 		setTitle("Pacman");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);

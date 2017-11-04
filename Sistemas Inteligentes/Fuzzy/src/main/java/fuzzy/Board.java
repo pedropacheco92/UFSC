@@ -559,8 +559,8 @@ public class Board extends JPanel implements ActionListener {
 		public void keyReleased(KeyEvent e) {
 			int key = e.getKeyCode();
 			if (key == Event.LEFT || key == Event.RIGHT || key == Event.UP || key == Event.DOWN) {
-				// Board.this.reqdx = 0;
-				// Board.this.reqdy = 0;
+				Board.this.reqdx = 0;
+				Board.this.reqdy = 0;
 			}
 		}
 	}
@@ -572,7 +572,7 @@ public class Board extends JPanel implements ActionListener {
 		// System.out.println(pos);
 		// short ch = this.screendata[pos];
 		// System.out.println(ch);
-		System.out.println("dist front " + distanceWallFront());
+		System.out.println(distanceWallLeft());
 		// System.out.println("dist left " + distanceWallLeft());
 
 	}
