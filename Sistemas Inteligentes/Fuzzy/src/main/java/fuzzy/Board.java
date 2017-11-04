@@ -38,13 +38,13 @@ public class Board extends JPanel implements ActionListener {
 	private static final int SCREEN_SIZE = NROFBLOCKS * BLOCK_SIZE;
 	private static final int PACMAN_ANIMDELAY = 2;
 	private static final int PACMAN_ANIMCOUNT = 4;
-	private static final int MAX_GHOSTS = 0;
+	private static final int MAX_GHOSTS = 12;
 	private static final int PACMAN_SPEED = 6;
 
 	int pacanimcount = PACMAN_ANIMDELAY;
 	int pacanimdir = 1;
 	int pacmananimpos = 0;
-	int nrofghosts = 0;
+	int nrofghosts = 6;
 	int pacsleft, score;
 	int deathcounter;
 	int[] dx, dy;
@@ -568,13 +568,9 @@ public class Board extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		repaint();
-		int pos = this.pacmanx / BLOCK_SIZE + NROFBLOCKS * (this.pacmany / BLOCK_SIZE);
-		// System.out.println(pos);
-		// short ch = this.screendata[pos];
-		// System.out.println(ch);
-		System.out.println(distanceWallLeft());
-		// System.out.println("dist left " + distanceWallLeft());
-
+		int front = distanceWallFront();
+		int left = distanceWallLeft();
+		int right = distanceWallRight();
 	}
 
 	private int distanceWallFront() {
