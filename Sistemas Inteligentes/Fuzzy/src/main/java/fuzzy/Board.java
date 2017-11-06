@@ -1,5 +1,6 @@
 package fuzzy;
 
+import java.awt.AWTException;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -9,6 +10,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,6 +20,9 @@ import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+
+import net.sourceforge.jFuzzyLogic.FIS;
+import net.sourceforge.jFuzzyLogic.rule.Variable;
 
 @SuppressWarnings("serial")
 public class Board extends JPanel implements ActionListener {
@@ -60,6 +65,8 @@ public class Board extends JPanel implements ActionListener {
 	int pacmanx, pacmany, pacmandx, pacmandy;
 	int reqdx, reqdy, viewdx, viewdy;
 
+	private FIS fis;
+
 	private static final short LEVEL_DATA[] = { 19, 26, 26, 26, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 22, 21, 0, 0, 0,
 			17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20, 21, 0, 0, 0, 17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20, 21, 0,
 			0, 0, 17, 16, 16, 24, 16, 16, 16, 16, 16, 16, 20, 17, 18, 18, 18, 16, 16, 20, 0, 17, 16, 16, 16, 16, 16, 20,
@@ -77,7 +84,8 @@ public class Board extends JPanel implements ActionListener {
 	short[] screendata;
 	Timer timer;
 
-	public Board() {
+	public Board(FIS fis) {
+		this.fis = fis;
 
 		getImages();
 
@@ -568,59 +576,83 @@ public class Board extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		repaint();
-		int front = distanceWallFront();
-		int left = distanceWallLeft();
-		int right = distanceWallRight();
+
+		if (this.ingame) {
+			Robot r = null;
+			try {
+				r = new Robot();
+			} catch (AWTException e1) {
+				e1.printStackTrace();
+			}
+			this.fis.setVariable("Wall_Front", distanceWallFront());
+			this.fis.setVariable("Wall_Right", distanceWallRight());
+			this.fis.setVariable("Wall_Left", distanceWallLeft());
+
+			this.fis.evaluate();
+			Variable direction = this.fis.getVariable("Direction");
+			if (0 < direction.getValue() && direction.getValue() < 10) { // right
+				r.keyPress(KeyEvent.VK_RIGHT);
+				r.keyRelease(KeyEvent.VK_RIGHT);
+			}
+
+			if (10 < direction.getValue() && direction.getValue() < 20) { // left
+				r.keyPress(KeyEvent.VK_RIGHT);
+				r.keyRelease(KeyEvent.VK_RIGHT);
+			}
+
+			if (20 < direction.getValue() && direction.getValue() < 30) { // around
+				r.keyPress(KeyEvent.VK_RIGHT);
+				r.keyRelease(KeyEvent.VK_RIGHT);
+			}
+
+		}
 	}
 
 	private int distanceWallFront() {
-		int pos = this.pacmanx / BLOCK_SIZE + NROFBLOCKS * (this.pacmany / BLOCK_SIZE);
+		int pos = 0;
 		short ch;
 
 		if (this.lastDiretion == 1) {
-			ch = this.screendata[pos];
-			if ((ch & 1) == 1) {
-				return 100;
+			for (int i = 0; i < 50; i++) {
+				int x = this.pacmanx;
+				pos = (x - i) / BLOCK_SIZE + NROFBLOCKS * (this.pacmany / BLOCK_SIZE);
+				ch = this.screendata[pos];
+				if ((ch & 1) == 1 || (ch & 4) == 4) {
+					return 100 - i * 2;
+				}
 			}
-			pos--;
-			ch = this.screendata[pos];
-			if ((ch & 4) == 4) {
-				return 100;
-			}
-
 		}
+
 		if (this.lastDiretion == 3) {
-			ch = this.screendata[pos];
-			if ((ch & 4) == 4) {
-				return 100;
-			}
-			pos++;
-			ch = this.screendata[pos];
-			if ((ch & 1) == 1) {
-				return 100;
+			for (int i = 0; i < 50; i++) {
+				int x = this.pacmanx;
+				pos = (x + i) / BLOCK_SIZE + NROFBLOCKS * (this.pacmany / BLOCK_SIZE);
+				ch = this.screendata[pos];
+				if ((ch & 1) == 1 || (ch & 4) == 4) {
+					return 100 - i * 2;
+				}
 			}
 		}
-		if (this.lastDiretion == 4) {
-			ch = this.screendata[pos];
-			if ((ch & 8) == 8) {
-				return 100;
-			}
 
-			pos = pos + NROFBLOCKS;
-			ch = this.screendata[pos];
-			if ((ch & 2) == 2) {
-				return 100;
+		if (this.lastDiretion == 4) {
+			for (int i = 0; i < 50; i++) {
+				int y = this.pacmany;
+				pos = this.pacmanx / BLOCK_SIZE + NROFBLOCKS * ((y + i) / BLOCK_SIZE);
+				ch = this.screendata[pos];
+				if ((ch & 8) == 8 || (ch & 2) == 2) {
+					return 100 - i * 2;
+				}
 			}
 		}
+
 		if (this.lastDiretion == 2) {
-			ch = this.screendata[pos];
-			if ((ch & 2) == 2) {
-				return 100;
-			}
-			pos = pos - NROFBLOCKS;
-			ch = this.screendata[pos];
-			if ((ch & 8) == 8) {
-				return 100;
+			for (int i = 0; i < 50; i++) {
+				int y = this.pacmany;
+				pos = this.pacmanx / BLOCK_SIZE + NROFBLOCKS * ((y - i) / BLOCK_SIZE);
+				ch = this.screendata[pos];
+				if ((ch & 8) == 8 || (ch & 2) == 2) {
+					return 100 - i * 2;
+				}
 			}
 		}
 
@@ -628,52 +660,47 @@ public class Board extends JPanel implements ActionListener {
 	}
 
 	private int distanceWallLeft() {
-		int pos = this.pacmanx / BLOCK_SIZE + NROFBLOCKS * (this.pacmany / BLOCK_SIZE);
+		int pos = 0;
 		short ch;
 
 		if (this.lastDiretion == 1) {
-			ch = this.screendata[pos];
-			if ((ch & 8) == 8) {
-				return 100;
+			for (int i = 0; i < 50; i++) {
+				int y = this.pacmany;
+				pos = this.pacmanx / BLOCK_SIZE + NROFBLOCKS * ((y + i) / BLOCK_SIZE);
+				ch = this.screendata[pos];
+				if ((ch & 8) == 8 || (ch & 2) == 2) {
+					return 100 - i * 2;
+				}
 			}
-			pos = pos + NROFBLOCKS;
-			ch = this.screendata[pos];
-			if ((ch & 2) == 2) {
-				return 100;
-			}
-
 		}
 		if (this.lastDiretion == 3) {
-			ch = this.screendata[pos];
-			if ((ch & 2) == 2) {
-				return 100;
-			}
-			pos = pos - NROFBLOCKS;
-			ch = this.screendata[pos];
-			if ((ch & 8) == 8) {
-				return 100;
+			for (int i = 0; i < 50; i++) {
+				int y = this.pacmany;
+				pos = this.pacmanx / BLOCK_SIZE + NROFBLOCKS * ((y - i) / BLOCK_SIZE);
+				ch = this.screendata[pos];
+				if ((ch & 2) == 2 || (ch & 8) == 8) {
+					return 100 - i * 2;
+				}
 			}
 		}
 		if (this.lastDiretion == 4) {
-			ch = this.screendata[pos];
-			if ((ch & 4) == 4) {
-				return 100;
-			}
-			pos++;
-			ch = this.screendata[pos];
-			if ((ch & 1) == 1) {
-				return 100;
+			for (int i = 0; i < 50; i++) {
+				int x = this.pacmanx;
+				pos = (x + i) / BLOCK_SIZE + NROFBLOCKS * (this.pacmany / BLOCK_SIZE);
+				ch = this.screendata[pos];
+				if ((ch & 4) == 4 || (ch & 1) == 1) {
+					return 100 - i * 2;
+				}
 			}
 		}
 		if (this.lastDiretion == 2) {
-			ch = this.screendata[pos];
-			if ((ch & 1) == 1) {
-				return 100;
-			}
-			pos--;
-			ch = this.screendata[pos];
-			if ((ch & 4) == 4) {
-				return 100;
+			for (int i = 0; i < 50; i++) {
+				int x = this.pacmanx;
+				pos = (x - i) / BLOCK_SIZE + NROFBLOCKS * (this.pacmany / BLOCK_SIZE);
+				ch = this.screendata[pos];
+				if ((ch & 1) == 1 || (ch & 4) == 4) {
+					return 100 - i * 2;
+				}
 			}
 		}
 
@@ -685,48 +712,43 @@ public class Board extends JPanel implements ActionListener {
 		short ch;
 
 		if (this.lastDiretion == 1) {
-			ch = this.screendata[pos];
-			if ((ch & 2) == 2) {
-				return 100;
+			for (int i = 0; i < 50; i++) {
+				int y = this.pacmany;
+				pos = this.pacmanx / BLOCK_SIZE + NROFBLOCKS * ((y - i) / BLOCK_SIZE);
+				ch = this.screendata[pos];
+				if ((ch & 2) == 2 || (ch & 8) == 8) {
+					return 100 - i * 2;
+				}
 			}
-			pos = pos - NROFBLOCKS;
-			ch = this.screendata[pos];
-			if ((ch & 8) == 8) {
-				return 100;
-			}
-
 		}
 		if (this.lastDiretion == 3) {
-			ch = this.screendata[pos];
-			if ((ch & 8) == 8) {
-				return 100;
-			}
-			pos = pos + NROFBLOCKS;
-			ch = this.screendata[pos];
-			if ((ch & 2) == 2) {
-				return 100;
+			for (int i = 0; i < 50; i++) {
+				int y = this.pacmany;
+				pos = this.pacmanx / BLOCK_SIZE + NROFBLOCKS * ((y + i) / BLOCK_SIZE);
+				ch = this.screendata[pos];
+				if ((ch & 8) == 8 || (ch & 2) == 2) {
+					return 100 - i * 2;
+				}
 			}
 		}
 		if (this.lastDiretion == 4) {
-			ch = this.screendata[pos];
-			if ((ch & 1) == 1) {
-				return 100;
-			}
-			pos--;
-			ch = this.screendata[pos];
-			if ((ch & 4) == 4) {
-				return 100;
+			for (int i = 0; i < 50; i++) {
+				int x = this.pacmanx;
+				pos = (x - i) / BLOCK_SIZE + NROFBLOCKS * (this.pacmany / BLOCK_SIZE);
+				ch = this.screendata[pos];
+				if ((ch & 1) == 1 || (ch & 4) == 4) {
+					return 100 - i * 2;
+				}
 			}
 		}
 		if (this.lastDiretion == 2) {
-			ch = this.screendata[pos];
-			if ((ch & 4) == 4) {
-				return 100;
-			}
-			pos++;
-			ch = this.screendata[pos];
-			if ((ch & 1) == 1) {
-				return 100;
+			for (int i = 0; i < 50; i++) {
+				int x = this.pacmanx;
+				pos = (x + i) / BLOCK_SIZE + NROFBLOCKS * (this.pacmany / BLOCK_SIZE);
+				ch = this.screendata[pos];
+				if ((ch & 4) == 4 || (ch & 1) == 1) {
+					return 100 - i * 2;
+				}
 			}
 		}
 

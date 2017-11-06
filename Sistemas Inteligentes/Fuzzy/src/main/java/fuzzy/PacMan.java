@@ -2,11 +2,14 @@ package fuzzy;
 
 import javax.swing.JFrame;
 
+import net.sourceforge.jFuzzyLogic.FIS;
+
 @SuppressWarnings("serial")
 public class PacMan extends JFrame {
 
 	public PacMan() {
-		add(new Board());
+		FIS fis = FIS.load("resources/tipper.fcl");
+		add(new Board(fis));
 		setTitle("Pacman");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(380, 420);

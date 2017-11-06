@@ -1,0 +1,38 @@
+FUNCTION_BLOCK
+VAR_INPUT
+    Wall_Front : REAL; 
+    Wall_Right : REAL; 
+    Wall_Left : REAL;
+END_VAR
+VAR_OUTPUT
+    Direction : REAL;
+END_VAR
+FUZZIFY Wall_Front
+	TERM Wall_Close := (80, 0) (100, 1) ; 
+    TERM Wall_Medium := (40, 0) (60, 1) (70, 1) (85, 0) ;
+    TERM Wall_Distance := (0, 0) (20, 1) (30, 1) (45, 0);
+END_FUZZIFY
+FUZZIFY Wall_Right
+	TERM Wall_Close := (80, 0) (100, 1) ; 
+    TERM Wall_Medium := (40, 0) (60, 1) (70, 1) (85, 0) ;
+    TERM Wall_Distance := (0, 0) (20, 1) (30, 1) (45, 0);
+END_FUZZIFY
+FUZZIFY Wall_Left
+	TERM Wall_Close := (80, 0) (100, 1) ; 
+    TERM Wall_Medium := (40, 0) (60, 1) (70, 1) (85, 0) ;
+    TERM Wall_Distance := (0, 0) (20, 1) (30, 1) (45, 0);
+END_FUZZIFY
+DEFUZZIFY Direction
+	TERM Turn_Right := (0,0) (5,1) (10,0) ;
+    TERM Turn_Left := (10,0) (15,1) (20,0) ;
+    TERM Turn_Around := (20,0) (25,1) (30,0) ;
+    METHOD : MM;
+END_DEFUZZIFY
+RULEBLOCK first
+
+AND:MIN;
+ACCU:MAX;
+RULE 0: IF Wall_Front IS Wall_Close AND Wall_Right IS Wall_Close THEN Direction IS Turn_Left;
+RULE 1: IF Wall_Front IS Wall_Close AND Wall_Left IS Wall_Close THEN Direction IS Turn_Right;
+END_RULEBLOCK
+END_FUNCTION_BLOCK
