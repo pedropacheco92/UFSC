@@ -1,6 +1,5 @@
 package fuzzy;
 
-import java.awt.AWTException;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -10,7 +9,6 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -60,7 +58,7 @@ public class Board extends JPanel implements ActionListener {
 	Image pacman3up, pacman3down, pacman3left, pacman3right;
 	Image pacman4up, pacman4down, pacman4left, pacman4right;
 
-	private int lastDiretion = 0;
+	private int lastDiretion = 4;
 
 	int pacmanx, pacmany, pacmandx, pacmandy;
 	int reqdx, reqdy, viewdx, viewdy;
@@ -578,31 +576,68 @@ public class Board extends JPanel implements ActionListener {
 		repaint();
 
 		if (this.ingame) {
-			Robot r = null;
-			try {
-				r = new Robot();
-			} catch (AWTException e1) {
-				e1.printStackTrace();
-			}
 			this.fis.setVariable("Wall_Front", distanceWallFront());
 			this.fis.setVariable("Wall_Right", distanceWallRight());
 			this.fis.setVariable("Wall_Left", distanceWallLeft());
 
 			this.fis.evaluate();
 			Variable direction = this.fis.getVariable("Direction");
+			System.out.println(direction.getValue());
 			if (0 < direction.getValue() && direction.getValue() < 10) { // right
-				r.keyPress(KeyEvent.VK_RIGHT);
-				r.keyRelease(KeyEvent.VK_RIGHT);
+				switch (this.lastDiretion) {
+				case 1:
+					this.lastDiretion = 2;
+					this.reqdx = 0;
+					this.reqdy = -1;
+					break;
+				case 2:
+					this.lastDiretion = 3;
+					this.reqdx = 1;
+					this.reqdy = 0;
+					break;
+				case 3:
+					this.lastDiretion = 4;
+					this.reqdx = 0;
+					this.reqdy = 1;
+					break;
+				case 4:
+					this.lastDiretion = 1;
+					this.reqdx = -1;
+					this.reqdy = 0;
+					break;
+				default:
+					break;
+				}
 			}
 
 			if (10 < direction.getValue() && direction.getValue() < 20) { // left
-				r.keyPress(KeyEvent.VK_RIGHT);
-				r.keyRelease(KeyEvent.VK_RIGHT);
+				switch (this.lastDiretion) {
+				case 1:
+					this.lastDiretion = 4;
+					this.reqdx = 0;
+					this.reqdy = 1;
+					break;
+				case 2:
+					this.lastDiretion = 1;
+					this.reqdx = -1;
+					this.reqdy = 0;
+					break;
+				case 3:
+					this.lastDiretion = 2;
+					this.reqdx = 0;
+					this.reqdy = -1;
+					break;
+				case 4:
+					this.lastDiretion = 3;
+					this.reqdx = 1;
+					this.reqdy = 0;
+					break;
+				default:
+					break;
+				}
 			}
 
 			if (20 < direction.getValue() && direction.getValue() < 30) { // around
-				r.keyPress(KeyEvent.VK_RIGHT);
-				r.keyRelease(KeyEvent.VK_RIGHT);
 			}
 
 		}
