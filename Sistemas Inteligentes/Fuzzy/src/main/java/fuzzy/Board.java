@@ -66,15 +66,12 @@ public class Board extends JPanel implements ActionListener {
 
 	private FIS fis;
 
-	private static final short LEVEL_DATA[] = { 19, 26, 26, 26, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 22, 21, 0, 0, 0,
-			17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20, 21, 0, 0, 0, 17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20, 21, 0,
-			0, 0, 17, 16, 16, 24, 16, 16, 16, 16, 16, 16, 20, 17, 18, 18, 18, 16, 16, 20, 0, 17, 16, 16, 16, 16, 16, 20,
-			17, 16, 16, 16, 16, 16, 20, 0, 17, 16, 16, 16, 16, 24, 20, 25, 16, 16, 16, 24, 24, 28, 0, 25, 24, 24, 16,
-			20, 0, 21, 1, 17, 16, 20, 0, 0, 0, 0, 0, 0, 0, 17, 20, 0, 21, 1, 17, 16, 16, 18, 18, 22, 0, 19, 18, 18, 16,
-			20, 0, 21, 1, 17, 16, 16, 16, 16, 20, 0, 17, 16, 16, 16, 20, 0, 21, 1, 17, 16, 16, 16, 16, 20, 0, 17, 16,
-			16, 16, 20, 0, 21, 1, 17, 16, 16, 16, 16, 16, 18, 16, 16, 16, 16, 20, 0, 21, 1, 17, 16, 16, 16, 16, 16, 16,
-			16, 16, 16, 16, 20, 0, 21, 1, 25, 24, 24, 24, 24, 24, 24, 24, 24, 16, 16, 16, 18, 20, 9, 8, 8, 8, 8, 8, 8,
-			8, 8, 8, 25, 24, 24, 24, 28 };
+	private static final short LEVEL_DATA[] = { 19, 26, 26, 26, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 22, 21, 0, 0, 0, 17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20, 21, 0, 0, 0,
+			17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20, 21, 0, 0, 0, 17, 16, 16, 24, 16, 16, 16, 16, 16, 16, 20, 17, 18, 18, 18, 16, 16, 20, 0, 17, 16, 16, 16, 16, 16, 20, 17, 16,
+			16, 16, 16, 16, 20, 0, 17, 16, 16, 16, 16, 24, 20, 25, 16, 16, 16, 24, 24, 28, 0, 25, 24, 24, 16, 20, 0, 21, 1, 17, 16, 20, 0, 0, 0, 0, 0, 0, 0, 17, 20, 0, 21, 1, 17,
+			16, 16, 18, 18, 22, 0, 19, 18, 18, 16, 20, 0, 21, 1, 17, 16, 16, 16, 16, 20, 0, 17, 16, 16, 16, 20, 0, 21, 1, 17, 16, 16, 16, 16, 20, 0, 17, 16, 16, 16, 20, 0, 21, 1,
+			17, 16, 16, 16, 16, 16, 18, 16, 16, 16, 16, 20, 0, 21, 1, 17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20, 0, 21, 1, 25, 24, 24, 24, 24, 24, 24, 24, 24, 16, 16, 16, 18,
+			20, 9, 8, 8, 8, 8, 8, 8, 8, 8, 8, 25, 24, 24, 24, 28 };
 
 	private static final int VALID_SPEEDS[] = { 1, 2, 3, 4, 6, 8 };
 	private static final int MAX_SPEED = 6;
@@ -86,18 +83,18 @@ public class Board extends JPanel implements ActionListener {
 	public Board(FIS fis) {
 		this.fis = fis;
 
-		getImages();
+		this.getImages();
 
-		addKeyListener(new TAdapter());
+		this.addKeyListener(new TAdapter());
 
 		this.screendata = new short[NROFBLOCKS * NROFBLOCKS];
 		this.mazecolor = new Color(5, 100, 5);
-		setFocusable(true);
+		this.setFocusable(true);
 
 		this.d = new Dimension(400, 400);
 
-		setBackground(Color.black);
-		setDoubleBuffered(true);
+		this.setBackground(Color.black);
+		this.setDoubleBuffered(true);
 
 		this.ghostx = new int[MAX_GHOSTS];
 		this.ghostdx = new int[MAX_GHOSTS];
@@ -113,7 +110,7 @@ public class Board extends JPanel implements ActionListener {
 	@Override
 	public void addNotify() {
 		super.addNotify();
-		gameInit();
+		this.gameInit();
 	}
 
 	public void doAnim() {
@@ -129,12 +126,12 @@ public class Board extends JPanel implements ActionListener {
 
 	public void playGame(Graphics2D g2d) {
 		if (this.dying) {
-			death();
+			this.death();
 		} else {
-			movePacMan();
-			drawPacMan(g2d);
+			this.movePacMan();
+			this.drawPacMan(g2d);
 			// moveGhosts(g2d);
-			checkMaze();
+			this.checkMaze();
 		}
 	}
 
@@ -147,7 +144,7 @@ public class Board extends JPanel implements ActionListener {
 
 		String s = "Press s to start.";
 		Font small = new Font("Helvetica", Font.BOLD, 14);
-		FontMetrics metr = getFontMetrics(small);
+		FontMetrics metr = this.getFontMetrics(small);
 
 		g2d.setColor(Color.white);
 		g2d.setFont(small);
@@ -187,7 +184,7 @@ public class Board extends JPanel implements ActionListener {
 			if (this.currentspeed < MAX_SPEED) {
 				this.currentspeed++;
 			}
-			levelInit();
+			this.levelInit();
 		}
 	}
 
@@ -196,7 +193,7 @@ public class Board extends JPanel implements ActionListener {
 		if (this.pacsleft == 0) {
 			this.ingame = false;
 		}
-		levelContinue();
+		this.levelContinue();
 	}
 
 	public void moveGhosts(Graphics2D g2d) {
@@ -250,10 +247,10 @@ public class Board extends JPanel implements ActionListener {
 			}
 			this.ghostx[i] = this.ghostx[i] + this.ghostdx[i] * this.ghostspeed[i];
 			this.ghosty[i] = this.ghosty[i] + this.ghostdy[i] * this.ghostspeed[i];
-			drawGhost(g2d, this.ghostx[i] + 1, this.ghosty[i] + 1);
+			this.drawGhost(g2d, this.ghostx[i] + 1, this.ghosty[i] + 1);
 
-			if (this.pacmanx > this.ghostx[i] - 12 && this.pacmanx < this.ghostx[i] + 12
-					&& this.pacmany > this.ghosty[i] - 12 && this.pacmany < this.ghosty[i] + 12 && this.ingame) {
+			if (this.pacmanx > this.ghostx[i] - 12 && this.pacmanx < this.ghostx[i] + 12 && this.pacmany > this.ghosty[i] - 12 && this.pacmany < this.ghosty[i] + 12
+					&& this.ingame) {
 
 				this.dying = true;
 				this.deathcounter = 64;
@@ -286,10 +283,8 @@ public class Board extends JPanel implements ActionListener {
 			}
 
 			if (this.reqdx != 0 || this.reqdy != 0) {
-				if (!(this.reqdx == -1 && this.reqdy == 0 && (ch & 1) != 0
-						|| this.reqdx == 1 && this.reqdy == 0 && (ch & 4) != 0
-						|| this.reqdx == 0 && this.reqdy == -1 && (ch & 2) != 0
-						|| this.reqdx == 0 && this.reqdy == 1 && (ch & 8) != 0)) {
+				if (!(this.reqdx == -1 && this.reqdy == 0 && (ch & 1) != 0 || this.reqdx == 1 && this.reqdy == 0 && (ch & 4) != 0
+						|| this.reqdx == 0 && this.reqdy == -1 && (ch & 2) != 0 || this.reqdx == 0 && this.reqdy == 1 && (ch & 8) != 0)) {
 					this.pacmandx = this.reqdx;
 					this.pacmandy = this.reqdy;
 					this.viewdx = this.pacmandx;
@@ -298,10 +293,8 @@ public class Board extends JPanel implements ActionListener {
 			}
 
 			// Check for standstill
-			if (this.pacmandx == -1 && this.pacmandy == 0 && (ch & 1) != 0
-					|| this.pacmandx == 1 && this.pacmandy == 0 && (ch & 4) != 0
-					|| this.pacmandx == 0 && this.pacmandy == -1 && (ch & 2) != 0
-					|| this.pacmandx == 0 && this.pacmandy == 1 && (ch & 8) != 0) {
+			if (this.pacmandx == -1 && this.pacmandy == 0 && (ch & 1) != 0 || this.pacmandx == 1 && this.pacmandy == 0 && (ch & 4) != 0
+					|| this.pacmandx == 0 && this.pacmandy == -1 && (ch & 2) != 0 || this.pacmandx == 0 && this.pacmandy == 1 && (ch & 8) != 0) {
 				this.pacmandx = 0;
 				this.pacmandy = 0;
 			}
@@ -312,13 +305,13 @@ public class Board extends JPanel implements ActionListener {
 
 	public void drawPacMan(Graphics2D g2d) {
 		if (this.viewdx == -1) {
-			drawPacManLeft(g2d);
+			this.drawPacManLeft(g2d);
 		} else if (this.viewdx == 1) {
-			drawPacManRight(g2d);
+			this.drawPacManRight(g2d);
 		} else if (this.viewdy == -1) {
-			drawPacManUp(g2d);
+			this.drawPacManUp(g2d);
 		} else {
-			drawPacManDown(g2d);
+			this.drawPacManDown(g2d);
 		}
 	}
 
@@ -428,7 +421,7 @@ public class Board extends JPanel implements ActionListener {
 	public void gameInit() {
 		this.pacsleft = 3;
 		this.score = 0;
-		levelInit();
+		this.levelInit();
 		this.nrofghosts = 6;
 		this.currentspeed = 3;
 	}
@@ -439,7 +432,7 @@ public class Board extends JPanel implements ActionListener {
 			this.screendata[i] = LEVEL_DATA[i];
 		}
 
-		levelContinue();
+		this.levelContinue();
 	}
 
 	public void levelContinue() {
@@ -497,13 +490,13 @@ public class Board extends JPanel implements ActionListener {
 		g2d.setColor(Color.black);
 		g2d.fillRect(0, 0, this.d.width, this.d.height);
 
-		drawMaze(g2d);
-		drawScore(g2d);
-		doAnim();
+		this.drawMaze(g2d);
+		this.drawScore(g2d);
+		this.doAnim();
 		if (this.ingame) {
-			playGame(g2d);
+			this.playGame(g2d);
 		} else {
-			showIntroScreen(g2d);
+			this.showIntroScreen(g2d);
 		}
 
 		g.drawImage(this.ii, 5, 5, this);
@@ -557,7 +550,7 @@ public class Board extends JPanel implements ActionListener {
 			} else {
 				if (key == 's' || key == 'S') {
 					Board.this.ingame = true;
-					gameInit();
+					Board.this.gameInit();
 				}
 			}
 		}
@@ -574,12 +567,12 @@ public class Board extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		repaint();
+		this.repaint();
 
 		if (this.ingame) {
-			int distanceWallFront = distanceWallFront();
-			int distanceWallRight = distanceWallRight();
-			int distanceWallLeft = distanceWallLeft();
+			int distanceWallFront = this.distanceWallFront();
+			int distanceWallRight = this.distanceWallRight();
+			int distanceWallLeft = this.distanceWallLeft();
 
 			this.fis.setVariable("Wall_Front", distanceWallFront);
 			this.fis.setVariable("Wall_Right", distanceWallRight);
@@ -587,8 +580,7 @@ public class Board extends JPanel implements ActionListener {
 
 			this.fis.evaluate();
 			Variable direction = this.fis.getVariable("Direction");
-			System.out.println(direction.getValue() + " front: " + distanceWallFront + " right: " + distanceWallRight
-					+ " left: " + distanceWallLeft);
+			System.out.println(direction.getValue() + " front: " + distanceWallFront + " right: " + distanceWallRight + " left: " + distanceWallLeft);
 			System.out.println(this.pacmandx + ";" + this.pacmandy);
 			if (0 < direction.getValue() && direction.getValue() < 10) { // right
 				switch (this.lastDiretion) {
@@ -702,149 +694,82 @@ public class Board extends JPanel implements ActionListener {
 	}
 
 	private int distanceWallFront() {
-		int pos = 0;
-		short ch;
+		int currentPos = this.pacmanx / BLOCK_SIZE + NROFBLOCKS * (this.pacmany / BLOCK_SIZE);
 
 		if (this.lastDiretion == 1) {
-			for (int i = 0; i < 50; i++) {
-				int x = this.pacmanx;
-				pos = (x - i) / BLOCK_SIZE + NROFBLOCKS * (this.pacmany / BLOCK_SIZE);
-				ch = this.screendata[pos];
-				if ((ch & 1) == 1 || (ch & 4) == 4) {
-					return 100 - i * 2;
-				}
-			}
+			return this.getDistante(true, false, 1, 4, currentPos);
 		}
 
 		if (this.lastDiretion == 3) {
-			for (int i = 0; i < 50; i++) {
-				int x = this.pacmanx;
-				pos = (x + i) / BLOCK_SIZE + NROFBLOCKS * (this.pacmany / BLOCK_SIZE);
-				ch = this.screendata[pos];
-				if ((ch & 1) == 1 || (ch & 4) == 4) {
-					return 100 - i * 2;
-				}
-			}
+			return this.getDistante(true, true, 4, 1, currentPos);
 		}
 
 		if (this.lastDiretion == 4) {
-			for (int i = 0; i < 50; i++) {
-				int y = this.pacmany;
-				pos = this.pacmanx / BLOCK_SIZE + NROFBLOCKS * ((y + i) / BLOCK_SIZE);
-				ch = this.screendata[pos];
-				if ((ch & 8) == 8 || (ch & 2) == 2) {
-					return 100 - i * 2;
-				}
-			}
+			return this.getDistante(false, true, 8, 2, currentPos);
 		}
 
 		if (this.lastDiretion == 2) {
-			for (int i = 0; i < 50; i++) {
-				int y = this.pacmany;
-				pos = this.pacmanx / BLOCK_SIZE + NROFBLOCKS * ((y - i) / BLOCK_SIZE);
-				ch = this.screendata[pos];
-				if ((ch & 8) == 8 || (ch & 2) == 2) {
-					return 100 - i * 2;
-				}
-			}
+			return this.getDistante(false, false, 2, 8, currentPos);
 		}
 
 		return 0;
 	}
 
 	private int distanceWallLeft() {
-		int pos = 0;
-		short ch;
+		int currentPos = this.pacmanx / BLOCK_SIZE + NROFBLOCKS * (this.pacmany / BLOCK_SIZE);
 
 		if (this.lastDiretion == 1) {
-			for (int i = 0; i < 50; i++) {
-				int y = this.pacmany;
-				pos = this.pacmanx / BLOCK_SIZE + NROFBLOCKS * ((y + i) / BLOCK_SIZE);
-				ch = this.screendata[pos];
-				if ((ch & 8) == 8 || (ch & 2) == 2) {
-					return 100 - i * 2;
-				}
-			}
+			return this.getDistante(false, true, 8, 2, currentPos);
 		}
 		if (this.lastDiretion == 3) {
-			for (int i = 0; i < 50; i++) {
-				int y = this.pacmany;
-				pos = this.pacmanx / BLOCK_SIZE + NROFBLOCKS * ((y - i) / BLOCK_SIZE);
-				ch = this.screendata[pos];
-				if ((ch & 2) == 2 || (ch & 8) == 8) {
-					return 100 - i * 2;
-				}
-			}
+			return this.getDistante(false, false, 2, 8, currentPos);
 		}
 		if (this.lastDiretion == 4) {
-			for (int i = 0; i < 50; i++) {
-				int x = this.pacmanx;
-				pos = (x + i) / BLOCK_SIZE + NROFBLOCKS * (this.pacmany / BLOCK_SIZE);
-				ch = this.screendata[pos];
-				if ((ch & 4) == 4 || (ch & 1) == 1) {
-					return 100 - i * 2;
-				}
-			}
+			return this.getDistante(true, true, 4, 1, currentPos);
 		}
 		if (this.lastDiretion == 2) {
-			for (int i = 0; i < 50; i++) {
-				int x = this.pacmanx;
-				pos = (x - i) / BLOCK_SIZE + NROFBLOCKS * (this.pacmany / BLOCK_SIZE);
-				ch = this.screendata[pos];
-				if ((ch & 1) == 1 || (ch & 4) == 4) {
-					return 100 - i * 2;
-				}
-			}
+			return this.getDistante(true, false, 1, 4, currentPos);
 		}
 
 		return 0;
 	}
 
 	private int distanceWallRight() {
-		int pos = 0;
-		short ch;
+		int currentPos = this.pacmanx / BLOCK_SIZE + NROFBLOCKS * (this.pacmany / BLOCK_SIZE);
 
 		if (this.lastDiretion == 1) {
-			for (int i = 0; i < 50; i++) {
-				int y = this.pacmany;
-				pos = this.pacmanx / BLOCK_SIZE + NROFBLOCKS * ((y - i) / BLOCK_SIZE);
-				ch = this.screendata[pos];
-				if ((ch & 2) == 2 || (ch & 8) == 8) {
-					return 100 - i * 2;
-				}
-			}
+			return this.getDistante(false, false, 2, 8, currentPos);
 		}
 		if (this.lastDiretion == 3) {
-			for (int i = 0; i < 50; i++) {
-				int y = this.pacmany;
-				pos = this.pacmanx / BLOCK_SIZE + NROFBLOCKS * ((y + i) / BLOCK_SIZE);
-				ch = this.screendata[pos];
-				if ((ch & 8) == 8 || (ch & 2) == 2) {
-					return 100 - i * 2;
-				}
-			}
+			return this.getDistante(false, true, 8, 2, currentPos);
 		}
 		if (this.lastDiretion == 4) {
-			for (int i = 0; i < 50; i++) {
-				int x = this.pacmanx;
-				pos = (x - i) / BLOCK_SIZE + NROFBLOCKS * (this.pacmany / BLOCK_SIZE);
-				ch = this.screendata[pos];
-				if ((ch & 1) == 1 || (ch & 4) == 4) {
-					return 100 - i * 2;
-				}
-			}
+			return this.getDistante(true, false, 1, 4, currentPos);
 		}
 		if (this.lastDiretion == 2) {
-			for (int i = 0; i < 50; i++) {
-				int x = this.pacmanx;
-				pos = (x + i) / BLOCK_SIZE + NROFBLOCKS * (this.pacmany / BLOCK_SIZE);
-				ch = this.screendata[pos];
-				if ((ch & 4) == 4 || (ch & 1) == 1) {
-					return 100 - i * 2;
-				}
-			}
+			return this.getDistante(true, true, 4, 1, currentPos);
 		}
 
+		return 0;
+	}
+
+	private int getDistante(boolean isX, boolean isAdd, int s1, int s2, int currentPos) {
+		for (int i = 0; i < 50; i++) {
+			int y = this.pacmany;
+			int x = this.pacmanx;
+			int pos = 0;
+			if (isX) {
+				x = isAdd ? x + i : x - i;
+				pos = x / BLOCK_SIZE + NROFBLOCKS * (this.pacmany / BLOCK_SIZE);
+			} else {
+				y = isAdd ? y + i : y - i;
+				pos = this.pacmanx / BLOCK_SIZE + NROFBLOCKS * (y / BLOCK_SIZE);
+			}
+			short ch = this.screendata[pos];
+			if ((ch & s1) == s1 || currentPos != pos && (ch & s2) == s2) {
+				return 100 - i * 2;
+			}
+		}
 		return 0;
 	}
 
