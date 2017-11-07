@@ -9,17 +9,17 @@ VAR_OUTPUT
 END_VAR
 FUZZIFY Wall_Front
 	TERM Wall_Close := (90, 0) (100, 1) ; 
-    TERM Wall_Medium := (40, 0) (60, 1) (70, 1) (95, 0) ;
+    TERM Wall_Medium := (40, 0) (50, 1) (70, 1) (95, 0) ;
     TERM Wall_Far := (0, 0) (20, 1) (30, 1) (45, 0);
 END_FUZZIFY
 FUZZIFY Wall_Right
 	TERM Wall_Close := (90, 0) (100, 1) ; 
-    TERM Wall_Medium := (40, 0) (60, 1) (70, 1) (95, 0) ;
+    TERM Wall_Medium := (40, 0) (50, 1) (70, 1) (95, 0) ;
     TERM Wall_Far := (0, 0) (20, 1) (30, 1) (45, 0);
 END_FUZZIFY
 FUZZIFY Wall_Left
 	TERM Wall_Close := (90, 0) (100, 1) ; 
-    TERM Wall_Medium := (40, 0) (60, 1) (70, 1) (95, 0) ;
+    TERM Wall_Medium := (40, 0) (50, 1) (70, 1) (95, 0) ;
     TERM Wall_Far := (0, 0) (20, 1) (30, 1) (45, 0);
 END_FUZZIFY
 DEFUZZIFY Direction

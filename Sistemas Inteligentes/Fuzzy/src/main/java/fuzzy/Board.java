@@ -589,6 +589,7 @@ public class Board extends JPanel implements ActionListener {
 			Variable direction = this.fis.getVariable("Direction");
 			System.out.println(direction.getValue() + " front: " + distanceWallFront + " right: " + distanceWallRight
 					+ " left: " + distanceWallLeft);
+			System.out.println(this.pacmandx + ";" + this.pacmandy);
 			if (0 < direction.getValue() && direction.getValue() < 10) { // right
 				switch (this.lastDiretion) {
 				case 1:
@@ -644,6 +645,30 @@ public class Board extends JPanel implements ActionListener {
 			}
 
 			if (20 < direction.getValue() && direction.getValue() < 30) { // around
+				switch (this.lastDiretion) {
+				case 1:
+					this.lastDiretion = 3;
+					this.reqdx = 1;
+					this.reqdy = 0;
+					break;
+				case 2:
+					this.lastDiretion = 4;
+					this.reqdx = 0;
+					this.reqdy = 1;
+					break;
+				case 3:
+					this.lastDiretion = 1;
+					this.reqdx = -1;
+					this.reqdy = 0;
+					break;
+				case 4:
+					this.lastDiretion = 2;
+					this.reqdx = 0;
+					this.reqdy = -1;
+					break;
+				default:
+					break;
+				}
 			}
 
 			if (40 < direction.getValue() && direction.getValue() < 50) { // random
@@ -776,7 +801,7 @@ public class Board extends JPanel implements ActionListener {
 	}
 
 	private int distanceWallRight() {
-		int pos = this.pacmanx / BLOCK_SIZE + NROFBLOCKS * (this.pacmany / BLOCK_SIZE);
+		int pos = 0;
 		short ch;
 
 		if (this.lastDiretion == 1) {
