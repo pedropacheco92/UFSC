@@ -14,12 +14,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import aestrela.AStar;
+import aestrela.GraphAStar;
 import net.sourceforge.jFuzzyLogic.FIS;
 import net.sourceforge.jFuzzyLogic.rule.Variable;
 
@@ -66,12 +72,15 @@ public class Board extends JPanel implements ActionListener {
 
 	private FIS fis;
 
-	private static final short LEVEL_DATA[] = { 19, 26, 26, 26, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 22, 21, 0, 0, 0, 17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20, 21, 0, 0, 0,
-			17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20, 21, 0, 0, 0, 17, 16, 16, 24, 16, 16, 16, 16, 16, 16, 20, 17, 18, 18, 18, 16, 16, 20, 0, 17, 16, 16, 16, 16, 16, 20, 17, 16,
-			16, 16, 16, 16, 20, 0, 17, 16, 16, 16, 16, 24, 20, 25, 16, 16, 16, 24, 24, 28, 0, 25, 24, 24, 16, 20, 0, 21, 1, 17, 16, 20, 0, 0, 0, 0, 0, 0, 0, 17, 20, 0, 21, 1, 17,
-			16, 16, 18, 18, 22, 0, 19, 18, 18, 16, 20, 0, 21, 1, 17, 16, 16, 16, 16, 20, 0, 17, 16, 16, 16, 20, 0, 21, 1, 17, 16, 16, 16, 16, 20, 0, 17, 16, 16, 16, 20, 0, 21, 1,
-			17, 16, 16, 16, 16, 16, 18, 16, 16, 16, 16, 20, 0, 21, 1, 17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20, 0, 21, 1, 25, 24, 24, 24, 24, 24, 24, 24, 24, 16, 16, 16, 18,
-			20, 9, 8, 8, 8, 8, 8, 8, 8, 8, 8, 25, 24, 24, 24, 28 };
+	private static final short LEVEL_DATA[] = { 19, 26, 26, 26, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 22, 21, 0, 0, 0,
+			17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20, 21, 0, 0, 0, 17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20, 21, 0,
+			0, 0, 17, 16, 16, 24, 16, 16, 16, 16, 16, 16, 20, 17, 18, 18, 18, 16, 16, 20, 0, 17, 16, 16, 16, 16, 16, 20,
+			17, 16, 16, 16, 16, 16, 20, 0, 17, 16, 16, 16, 16, 24, 20, 25, 16, 16, 16, 24, 24, 28, 0, 25, 24, 24, 16,
+			20, 0, 21, 1, 17, 16, 20, 0, 0, 0, 0, 0, 0, 0, 17, 20, 0, 21, 1, 17, 16, 16, 18, 18, 22, 0, 19, 18, 18, 16,
+			20, 0, 21, 1, 17, 16, 16, 16, 16, 20, 0, 17, 16, 16, 16, 20, 0, 21, 1, 17, 16, 16, 16, 16, 20, 0, 17, 16,
+			16, 16, 20, 0, 21, 1, 17, 16, 16, 16, 16, 16, 18, 16, 16, 16, 16, 20, 0, 21, 1, 17, 16, 16, 16, 16, 16, 16,
+			16, 16, 16, 16, 20, 0, 21, 1, 25, 24, 24, 24, 24, 24, 24, 24, 24, 16, 16, 16, 18, 20, 9, 8, 8, 8, 8, 8, 8,
+			8, 8, 8, 25, 24, 24, 24, 28 };
 
 	private static final int VALID_SPEEDS[] = { 1, 2, 3, 4, 6, 8 };
 	private static final int MAX_SPEED = 6;
@@ -83,18 +92,18 @@ public class Board extends JPanel implements ActionListener {
 	public Board(FIS fis) {
 		this.fis = fis;
 
-		this.getImages();
+		getImages();
 
-		this.addKeyListener(new TAdapter());
+		addKeyListener(new TAdapter());
 
 		this.screendata = new short[NROFBLOCKS * NROFBLOCKS];
 		this.mazecolor = new Color(5, 100, 5);
-		this.setFocusable(true);
+		setFocusable(true);
 
 		this.d = new Dimension(400, 400);
 
-		this.setBackground(Color.black);
-		this.setDoubleBuffered(true);
+		setBackground(Color.black);
+		setDoubleBuffered(true);
 
 		this.ghostx = new int[MAX_GHOSTS];
 		this.ghostdx = new int[MAX_GHOSTS];
@@ -110,7 +119,7 @@ public class Board extends JPanel implements ActionListener {
 	@Override
 	public void addNotify() {
 		super.addNotify();
-		this.gameInit();
+		gameInit();
 	}
 
 	public void doAnim() {
@@ -126,12 +135,12 @@ public class Board extends JPanel implements ActionListener {
 
 	public void playGame(Graphics2D g2d) {
 		if (this.dying) {
-			this.death();
+			death();
 		} else {
-			this.movePacMan();
-			this.drawPacMan(g2d);
-			// moveGhosts(g2d);
-			this.checkMaze();
+			movePacMan();
+			drawPacMan(g2d);
+			moveGhosts(g2d);
+			checkMaze();
 		}
 	}
 
@@ -144,7 +153,7 @@ public class Board extends JPanel implements ActionListener {
 
 		String s = "Press s to start.";
 		Font small = new Font("Helvetica", Font.BOLD, 14);
-		FontMetrics metr = this.getFontMetrics(small);
+		FontMetrics metr = getFontMetrics(small);
 
 		g2d.setColor(Color.white);
 		g2d.setFont(small);
@@ -184,7 +193,7 @@ public class Board extends JPanel implements ActionListener {
 			if (this.currentspeed < MAX_SPEED) {
 				this.currentspeed++;
 			}
-			this.levelInit();
+			levelInit();
 		}
 	}
 
@@ -193,7 +202,7 @@ public class Board extends JPanel implements ActionListener {
 		if (this.pacsleft == 0) {
 			this.ingame = false;
 		}
-		this.levelContinue();
+		levelContinue();
 	}
 
 	public void moveGhosts(Graphics2D g2d) {
@@ -247,10 +256,10 @@ public class Board extends JPanel implements ActionListener {
 			}
 			this.ghostx[i] = this.ghostx[i] + this.ghostdx[i] * this.ghostspeed[i];
 			this.ghosty[i] = this.ghosty[i] + this.ghostdy[i] * this.ghostspeed[i];
-			this.drawGhost(g2d, this.ghostx[i] + 1, this.ghosty[i] + 1);
+			drawGhost(g2d, this.ghostx[i] + 1, this.ghosty[i] + 1);
 
-			if (this.pacmanx > this.ghostx[i] - 12 && this.pacmanx < this.ghostx[i] + 12 && this.pacmany > this.ghosty[i] - 12 && this.pacmany < this.ghosty[i] + 12
-					&& this.ingame) {
+			if (this.pacmanx > this.ghostx[i] - 12 && this.pacmanx < this.ghostx[i] + 12
+					&& this.pacmany > this.ghosty[i] - 12 && this.pacmany < this.ghosty[i] + 12 && this.ingame) {
 
 				this.dying = true;
 				this.deathcounter = 64;
@@ -283,8 +292,10 @@ public class Board extends JPanel implements ActionListener {
 			}
 
 			if (this.reqdx != 0 || this.reqdy != 0) {
-				if (!(this.reqdx == -1 && this.reqdy == 0 && (ch & 1) != 0 || this.reqdx == 1 && this.reqdy == 0 && (ch & 4) != 0
-						|| this.reqdx == 0 && this.reqdy == -1 && (ch & 2) != 0 || this.reqdx == 0 && this.reqdy == 1 && (ch & 8) != 0)) {
+				if (!(this.reqdx == -1 && this.reqdy == 0 && (ch & 1) != 0
+						|| this.reqdx == 1 && this.reqdy == 0 && (ch & 4) != 0
+						|| this.reqdx == 0 && this.reqdy == -1 && (ch & 2) != 0
+						|| this.reqdx == 0 && this.reqdy == 1 && (ch & 8) != 0)) {
 					this.pacmandx = this.reqdx;
 					this.pacmandy = this.reqdy;
 					this.viewdx = this.pacmandx;
@@ -293,8 +304,10 @@ public class Board extends JPanel implements ActionListener {
 			}
 
 			// Check for standstill
-			if (this.pacmandx == -1 && this.pacmandy == 0 && (ch & 1) != 0 || this.pacmandx == 1 && this.pacmandy == 0 && (ch & 4) != 0
-					|| this.pacmandx == 0 && this.pacmandy == -1 && (ch & 2) != 0 || this.pacmandx == 0 && this.pacmandy == 1 && (ch & 8) != 0) {
+			if (this.pacmandx == -1 && this.pacmandy == 0 && (ch & 1) != 0
+					|| this.pacmandx == 1 && this.pacmandy == 0 && (ch & 4) != 0
+					|| this.pacmandx == 0 && this.pacmandy == -1 && (ch & 2) != 0
+					|| this.pacmandx == 0 && this.pacmandy == 1 && (ch & 8) != 0) {
 				this.pacmandx = 0;
 				this.pacmandy = 0;
 			}
@@ -305,13 +318,13 @@ public class Board extends JPanel implements ActionListener {
 
 	public void drawPacMan(Graphics2D g2d) {
 		if (this.viewdx == -1) {
-			this.drawPacManLeft(g2d);
+			drawPacManLeft(g2d);
 		} else if (this.viewdx == 1) {
-			this.drawPacManRight(g2d);
+			drawPacManRight(g2d);
 		} else if (this.viewdy == -1) {
-			this.drawPacManUp(g2d);
+			drawPacManUp(g2d);
 		} else {
-			this.drawPacManDown(g2d);
+			drawPacManDown(g2d);
 		}
 	}
 
@@ -421,7 +434,7 @@ public class Board extends JPanel implements ActionListener {
 	public void gameInit() {
 		this.pacsleft = 3;
 		this.score = 0;
-		this.levelInit();
+		levelInit();
 		this.nrofghosts = 6;
 		this.currentspeed = 3;
 	}
@@ -432,7 +445,7 @@ public class Board extends JPanel implements ActionListener {
 			this.screendata[i] = LEVEL_DATA[i];
 		}
 
-		this.levelContinue();
+		levelContinue();
 	}
 
 	public void levelContinue() {
@@ -490,13 +503,13 @@ public class Board extends JPanel implements ActionListener {
 		g2d.setColor(Color.black);
 		g2d.fillRect(0, 0, this.d.width, this.d.height);
 
-		this.drawMaze(g2d);
-		this.drawScore(g2d);
-		this.doAnim();
+		drawMaze(g2d);
+		drawScore(g2d);
+		doAnim();
 		if (this.ingame) {
-			this.playGame(g2d);
+			playGame(g2d);
 		} else {
-			this.showIntroScreen(g2d);
+			showIntroScreen(g2d);
 		}
 
 		g.drawImage(this.ii, 5, 5, this);
@@ -550,7 +563,7 @@ public class Board extends JPanel implements ActionListener {
 			} else {
 				if (key == 's' || key == 'S') {
 					Board.this.ingame = true;
-					Board.this.gameInit();
+					gameInit();
 				}
 			}
 		}
@@ -570,9 +583,10 @@ public class Board extends JPanel implements ActionListener {
 		this.repaint();
 
 		if (this.ingame) {
-			int distanceWallFront = this.distanceWallFront();
-			int distanceWallRight = this.distanceWallRight();
-			int distanceWallLeft = this.distanceWallLeft();
+			int distanceWallFront = distanceWallFront();
+			int distanceWallRight = distanceWallRight();
+			int distanceWallLeft = distanceWallLeft();
+			System.out.println(distanceClosestMonster());
 
 			this.fis.setVariable("Wall_Front", distanceWallFront);
 			this.fis.setVariable("Wall_Right", distanceWallRight);
@@ -580,8 +594,10 @@ public class Board extends JPanel implements ActionListener {
 
 			this.fis.evaluate();
 			Variable direction = this.fis.getVariable("Direction");
-			System.out.println(direction.getValue() + " front: " + distanceWallFront + " right: " + distanceWallRight + " left: " + distanceWallLeft);
-			System.out.println(this.pacmandx + ";" + this.pacmandy);
+			// System.out.println(direction.getValue() + " front: " + distanceWallFront + "
+			// right: " + distanceWallRight
+			// + " left: " + distanceWallLeft);
+			// System.out.println(this.pacmandx + ";" + this.pacmandy);
 			if (0 < direction.getValue() && direction.getValue() < 10) { // right
 				switch (this.lastDiretion) {
 				case 1:
@@ -697,19 +713,19 @@ public class Board extends JPanel implements ActionListener {
 		int currentPos = this.pacmanx / BLOCK_SIZE + NROFBLOCKS * (this.pacmany / BLOCK_SIZE);
 
 		if (this.lastDiretion == 1) {
-			return this.getDistante(true, false, 1, 4, currentPos);
+			return getDistante(true, false, 1, 4, currentPos);
 		}
 
 		if (this.lastDiretion == 3) {
-			return this.getDistante(true, true, 4, 1, currentPos);
+			return getDistante(true, true, 4, 1, currentPos);
 		}
 
 		if (this.lastDiretion == 4) {
-			return this.getDistante(false, true, 8, 2, currentPos);
+			return getDistante(false, true, 8, 2, currentPos);
 		}
 
 		if (this.lastDiretion == 2) {
-			return this.getDistante(false, false, 2, 8, currentPos);
+			return getDistante(false, false, 2, 8, currentPos);
 		}
 
 		return 0;
@@ -719,16 +735,16 @@ public class Board extends JPanel implements ActionListener {
 		int currentPos = this.pacmanx / BLOCK_SIZE + NROFBLOCKS * (this.pacmany / BLOCK_SIZE);
 
 		if (this.lastDiretion == 1) {
-			return this.getDistante(false, true, 8, 2, currentPos);
+			return getDistante(false, true, 8, 2, currentPos);
 		}
 		if (this.lastDiretion == 3) {
-			return this.getDistante(false, false, 2, 8, currentPos);
+			return getDistante(false, false, 2, 8, currentPos);
 		}
 		if (this.lastDiretion == 4) {
-			return this.getDistante(true, true, 4, 1, currentPos);
+			return getDistante(true, true, 4, 1, currentPos);
 		}
 		if (this.lastDiretion == 2) {
-			return this.getDistante(true, false, 1, 4, currentPos);
+			return getDistante(true, false, 1, 4, currentPos);
 		}
 
 		return 0;
@@ -738,16 +754,16 @@ public class Board extends JPanel implements ActionListener {
 		int currentPos = this.pacmanx / BLOCK_SIZE + NROFBLOCKS * (this.pacmany / BLOCK_SIZE);
 
 		if (this.lastDiretion == 1) {
-			return this.getDistante(false, false, 2, 8, currentPos);
+			return getDistante(false, false, 2, 8, currentPos);
 		}
 		if (this.lastDiretion == 3) {
-			return this.getDistante(false, true, 8, 2, currentPos);
+			return getDistante(false, true, 8, 2, currentPos);
 		}
 		if (this.lastDiretion == 4) {
-			return this.getDistante(true, false, 1, 4, currentPos);
+			return getDistante(true, false, 1, 4, currentPos);
 		}
 		if (this.lastDiretion == 2) {
-			return this.getDistante(true, true, 4, 1, currentPos);
+			return getDistante(true, true, 4, 1, currentPos);
 		}
 
 		return 0;
@@ -774,8 +790,47 @@ public class Board extends JPanel implements ActionListener {
 	}
 
 	private int distanceClosestMonster() {
+		List<Integer> ghosts = new ArrayList<>();
+		int currentPos = this.pacmanx / BLOCK_SIZE + NROFBLOCKS * (this.pacmany / BLOCK_SIZE);
+		for (int k = 0; k < this.nrofghosts; k++) {
+			Map<String, Map<String, Double>> hueristic = new HashMap<>();
+			GraphAStar<String> graph = new GraphAStar<>(hueristic);
+			for (int i = 0; i < NROFBLOCKS * NROFBLOCKS; i++) {
+				Map<String, Double> map = new HashMap<>();
+				for (int j = 0; j < NROFBLOCKS * NROFBLOCKS; j++) {
+					map.put(Integer.toString(j), (double) (i % NROFBLOCKS + j));
+				}
 
-		return 0;
+				hueristic.put(Integer.toString(i), map);
+				graph.addNode(Integer.toString(i));
+			}
+
+			for (int i = 0; i < NROFBLOCKS * NROFBLOCKS; i++) {
+				if (i != 0) {
+					graph.addEdge(Integer.toString(i), Integer.toString(i - 1), 10);
+				}
+				if (i > NROFBLOCKS) {
+					graph.addEdge(Integer.toString(i), Integer.toString(i - NROFBLOCKS), 10);
+				}
+				if (i + 1 < 225) {
+					graph.addEdge(Integer.toString(i), Integer.toString(i + 1), 10);
+				}
+				if (i + NROFBLOCKS < 225) {
+					graph.addEdge(Integer.toString(i), Integer.toString(i + NROFBLOCKS), 10);
+				}
+			}
+
+			AStar<String> aStar = new AStar<>(graph);
+
+			int x = this.ghostx[k];
+			int y = this.ghosty[k];
+			int ghostPos = x / BLOCK_SIZE + NROFBLOCKS * (y / BLOCK_SIZE);
+			int dist = aStar.astar(Integer.toString(ghostPos), Integer.toString(currentPos)).size();
+			ghosts.add(dist);
+		}
+
+		ghosts.sort(Integer::compare);
+		return ghosts.get(0);
 	}
 
 }
