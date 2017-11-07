@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -576,13 +577,18 @@ public class Board extends JPanel implements ActionListener {
 		repaint();
 
 		if (this.ingame) {
-			this.fis.setVariable("Wall_Front", distanceWallFront());
-			this.fis.setVariable("Wall_Right", distanceWallRight());
-			this.fis.setVariable("Wall_Left", distanceWallLeft());
+			int distanceWallFront = distanceWallFront();
+			int distanceWallRight = distanceWallRight();
+			int distanceWallLeft = distanceWallLeft();
+
+			this.fis.setVariable("Wall_Front", distanceWallFront);
+			this.fis.setVariable("Wall_Right", distanceWallRight);
+			this.fis.setVariable("Wall_Left", distanceWallLeft);
 
 			this.fis.evaluate();
 			Variable direction = this.fis.getVariable("Direction");
-			System.out.println(direction.getValue());
+			System.out.println(direction.getValue() + " front: " + distanceWallFront + " right: " + distanceWallRight
+					+ " left: " + distanceWallLeft);
 			if (0 < direction.getValue() && direction.getValue() < 10) { // right
 				switch (this.lastDiretion) {
 				case 1:
@@ -638,6 +644,33 @@ public class Board extends JPanel implements ActionListener {
 			}
 
 			if (20 < direction.getValue() && direction.getValue() < 30) { // around
+			}
+
+			if (40 < direction.getValue() && direction.getValue() < 50) { // random
+				switch (ThreadLocalRandom.current().nextInt(1, 5)) {
+				case 1:
+					this.lastDiretion = 4;
+					this.reqdx = 0;
+					this.reqdy = 1;
+					break;
+				case 2:
+					this.lastDiretion = 1;
+					this.reqdx = -1;
+					this.reqdy = 0;
+					break;
+				case 3:
+					this.lastDiretion = 2;
+					this.reqdx = 0;
+					this.reqdy = -1;
+					break;
+				case 4:
+					this.lastDiretion = 3;
+					this.reqdx = 1;
+					this.reqdy = 0;
+					break;
+				default:
+					break;
+				}
 			}
 
 		}
