@@ -48,13 +48,13 @@ public class Board extends JPanel implements ActionListener {
 	private static final int SCREEN_SIZE = NROFBLOCKS * BLOCK_SIZE;
 	private static final int PACMAN_ANIMDELAY = 2;
 	private static final int PACMAN_ANIMCOUNT = 4;
-	private static final int MAX_GHOSTS = 12;
+	private static final int MAX_GHOSTS = 0;
 	private static final int PACMAN_SPEED = 6;
 
 	int pacanimcount = PACMAN_ANIMDELAY;
 	int pacanimdir = 1;
 	int pacmananimpos = 0;
-	int nrofghosts = 6;
+	int nrofghosts = 0;
 	int pacsleft, score;
 	int deathcounter;
 	int[] dx, dy;
@@ -139,7 +139,7 @@ public class Board extends JPanel implements ActionListener {
 		} else {
 			movePacMan();
 			drawPacMan(g2d);
-			moveGhosts(g2d);
+			// moveGhosts(g2d);
 			checkMaze();
 		}
 	}
@@ -586,7 +586,7 @@ public class Board extends JPanel implements ActionListener {
 			int distanceWallFront = distanceWallFront();
 			int distanceWallRight = distanceWallRight();
 			int distanceWallLeft = distanceWallLeft();
-			System.out.println(distanceClosestMonster());
+			// System.out.println(distanceClosestMonster());
 
 			this.fis.setVariable("Wall_Front", distanceWallFront);
 			this.fis.setVariable("Wall_Right", distanceWallRight);
@@ -594,31 +594,22 @@ public class Board extends JPanel implements ActionListener {
 
 			this.fis.evaluate();
 			Variable direction = this.fis.getVariable("Direction");
-			// System.out.println(direction.getValue() + " front: " + distanceWallFront + "
-			// right: " + distanceWallRight
-			// + " left: " + distanceWallLeft);
+			System.out.println(direction.getValue() + " front: " + distanceWallFront + " right: " + distanceWallRight
+					+ " left: " + distanceWallLeft);
 			// System.out.println(this.pacmandx + ";" + this.pacmandy);
 			if (0 < direction.getValue() && direction.getValue() < 10) { // right
 				switch (this.lastDiretion) {
 				case 1:
-					this.lastDiretion = 2;
-					this.reqdx = 0;
-					this.reqdy = -1;
+					changeDirection(2);
 					break;
 				case 2:
-					this.lastDiretion = 3;
-					this.reqdx = 1;
-					this.reqdy = 0;
+					changeDirection(3);
 					break;
 				case 3:
-					this.lastDiretion = 4;
-					this.reqdx = 0;
-					this.reqdy = 1;
+					changeDirection(4);
 					break;
 				case 4:
-					this.lastDiretion = 1;
-					this.reqdx = -1;
-					this.reqdy = 0;
+					changeDirection(1);
 					break;
 				default:
 					break;
@@ -628,24 +619,16 @@ public class Board extends JPanel implements ActionListener {
 			if (10 < direction.getValue() && direction.getValue() < 20) { // left
 				switch (this.lastDiretion) {
 				case 1:
-					this.lastDiretion = 4;
-					this.reqdx = 0;
-					this.reqdy = 1;
+					changeDirection(4);
 					break;
 				case 2:
-					this.lastDiretion = 1;
-					this.reqdx = -1;
-					this.reqdy = 0;
+					changeDirection(1);
 					break;
 				case 3:
-					this.lastDiretion = 2;
-					this.reqdx = 0;
-					this.reqdy = -1;
+					changeDirection(2);
 					break;
 				case 4:
-					this.lastDiretion = 3;
-					this.reqdx = 1;
-					this.reqdy = 0;
+					changeDirection(3);
 					break;
 				default:
 					break;
@@ -655,55 +638,24 @@ public class Board extends JPanel implements ActionListener {
 			if (20 < direction.getValue() && direction.getValue() < 30) { // around
 				switch (this.lastDiretion) {
 				case 1:
-					this.lastDiretion = 3;
-					this.reqdx = 1;
-					this.reqdy = 0;
+					changeDirection(3);
 					break;
 				case 2:
-					this.lastDiretion = 4;
-					this.reqdx = 0;
-					this.reqdy = 1;
+					changeDirection(4);
 					break;
 				case 3:
-					this.lastDiretion = 1;
-					this.reqdx = -1;
-					this.reqdy = 0;
+					changeDirection(1);
 					break;
 				case 4:
-					this.lastDiretion = 2;
-					this.reqdx = 0;
-					this.reqdy = -1;
+					changeDirection(2);
 					break;
 				default:
 					break;
 				}
 			}
 
-			if (40 < direction.getValue() && direction.getValue() < 50) { // random
-				switch (ThreadLocalRandom.current().nextInt(1, 5)) {
-				case 1:
-					this.lastDiretion = 4;
-					this.reqdx = 0;
-					this.reqdy = 1;
-					break;
-				case 2:
-					this.lastDiretion = 1;
-					this.reqdx = -1;
-					this.reqdy = 0;
-					break;
-				case 3:
-					this.lastDiretion = 2;
-					this.reqdx = 0;
-					this.reqdy = -1;
-					break;
-				case 4:
-					this.lastDiretion = 3;
-					this.reqdx = 1;
-					this.reqdy = 0;
-					break;
-				default:
-					break;
-				}
+			if (30 < direction.getValue() && direction.getValue() < 40) { // random
+				changeDirection(ThreadLocalRandom.current().nextInt(1, 5));
 			}
 
 		}
@@ -767,6 +719,30 @@ public class Board extends JPanel implements ActionListener {
 		}
 
 		return 0;
+	}
+
+	private void changeDirection(int direction) {
+		switch (direction) {
+		case 1:
+			this.reqdx = -1;
+			this.reqdy = 0;
+			break;
+		case 2:
+			this.reqdx = 0;
+			this.reqdy = -1;
+			break;
+		case 3:
+			this.reqdx = 1;
+			this.reqdy = 0;
+			break;
+		case 4:
+			this.reqdx = 0;
+			this.reqdy = 1;
+			break;
+		default:
+			break;
+		}
+		this.lastDiretion = direction;
 	}
 
 	private int getDistante(boolean isX, boolean isAdd, int s1, int s2, int currentPos) {
