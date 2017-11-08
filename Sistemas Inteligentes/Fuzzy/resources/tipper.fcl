@@ -3,6 +3,8 @@ VAR_INPUT
     Wall_Front : REAL; 
     Wall_Right : REAL; 
     Wall_Left : REAL;
+    Enemy : REAL;
+    Food : REAL;
 END_VAR
 VAR_OUTPUT
     Direction : REAL;

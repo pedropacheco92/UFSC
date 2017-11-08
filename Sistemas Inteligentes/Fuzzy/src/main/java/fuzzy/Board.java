@@ -15,6 +15,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -587,6 +588,7 @@ public class Board extends JPanel implements ActionListener {
 			int distanceWallRight = distanceWallRight();
 			int distanceWallLeft = distanceWallLeft();
 			// System.out.println(distanceClosestMonster());
+			distanceClosestFood();
 
 			this.fis.setVariable("Wall_Front", distanceWallFront);
 			this.fis.setVariable("Wall_Right", distanceWallRight);
@@ -594,8 +596,9 @@ public class Board extends JPanel implements ActionListener {
 
 			this.fis.evaluate();
 			Variable direction = this.fis.getVariable("Direction");
-			System.out.println(direction.getValue() + " front: " + distanceWallFront + " right: " + distanceWallRight
-					+ " left: " + distanceWallLeft);
+			// System.out.println(direction.getValue() + " front: " + distanceWallFront + "
+			// right: " + distanceWallRight
+			// + " left: " + distanceWallLeft);
 			// System.out.println(this.pacmandx + ";" + this.pacmandy);
 			if (0 < direction.getValue() && direction.getValue() < 10) { // right
 				switch (this.lastDiretion) {
@@ -807,6 +810,49 @@ public class Board extends JPanel implements ActionListener {
 
 		ghosts.sort(Integer::compare);
 		return ghosts.get(0);
+	}
+
+	private int distanceClosestFood() {
+		int currentPos = this.pacmanx / BLOCK_SIZE + NROFBLOCKS * (this.pacmany / BLOCK_SIZE);
+		List<Integer> positionsWithFood = new ArrayList<>();
+		int pos = currentPos + 1;
+		if (pos < 225) {
+			short ch = this.screendata[pos];
+			if ((ch & 16) == 16) {
+				positionsWithFood.add(pos);
+			}
+		}
+
+		pos = currentPos + NROFBLOCKS;
+		if (pos < 225) {
+			short ch = this.screendata[pos];
+			if ((ch & 16) == 16) {
+				positionsWithFood.add(pos);
+			}
+		}
+
+		pos = currentPos - 1;
+		if (pos >= 0) {
+			short ch = this.screendata[pos];
+			if ((ch & 16) == 16) {
+				positionsWithFood.add(pos);
+			}
+		}
+
+		pos = currentPos - NROFBLOCKS;
+		if (pos >= 0) {
+			short ch = this.screendata[pos];
+			if ((ch & 16) == 16) {
+				positionsWithFood.add(pos);
+			}
+		}
+		if (positionsWithFood.isEmpty()) {
+			return 0;
+		}
+
+		Collections.shuffle(positionsWithFood);
+		System.out.println(positionsWithFood.get(0) + " : " + currentPos);
+		return positionsWithFood.get(0);
 	}
 
 }
