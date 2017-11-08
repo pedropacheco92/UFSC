@@ -67,6 +67,8 @@ public class Board extends JPanel implements ActionListener {
 	Image pacman4up, pacman4down, pacman4left, pacman4right;
 
 	private int lastDiretion = 4;
+	private boolean hasGhost = true;
+	private boolean hasFuzzy = true;
 
 	int pacmanx, pacmany, pacmandx, pacmandy;
 	int reqdx, reqdy, viewdx, viewdy;
@@ -90,8 +92,10 @@ public class Board extends JPanel implements ActionListener {
 	short[] screendata;
 	Timer timer;
 
-	public Board(FIS fis) {
+	public Board(FIS fis, boolean ghost2, boolean fuzzy) {
 		this.fis = fis;
+		this.hasGhost = !ghost2;
+		this.hasFuzzy = !fuzzy;
 
 		getImages();
 
@@ -140,7 +144,9 @@ public class Board extends JPanel implements ActionListener {
 		} else {
 			movePacMan();
 			drawPacMan(g2d);
-			moveGhosts(g2d);
+			if (this.hasGhost) {
+				moveGhosts(g2d);
+			}
 			checkMaze();
 		}
 	}
@@ -454,17 +460,19 @@ public class Board extends JPanel implements ActionListener {
 		int dx2 = 1;
 		int random;
 
-		for (i = 0; i < this.nrofghosts; i++) {
-			this.ghosty[i] = 4 * BLOCK_SIZE;
-			this.ghostx[i] = 4 * BLOCK_SIZE;
-			this.ghostdy[i] = 0;
-			this.ghostdx[i] = dx2;
-			dx2 = -dx2;
-			random = (int) (Math.random() * (this.currentspeed + 1));
-			if (random > this.currentspeed) {
-				random = this.currentspeed;
+		if (this.hasGhost) {
+			for (i = 0; i < this.nrofghosts; i++) {
+				this.ghosty[i] = 4 * BLOCK_SIZE;
+				this.ghostx[i] = 4 * BLOCK_SIZE;
+				this.ghostdy[i] = 0;
+				this.ghostdx[i] = dx2;
+				dx2 = -dx2;
+				random = (int) (Math.random() * (this.currentspeed + 1));
+				if (random > this.currentspeed) {
+					random = this.currentspeed;
+				}
+				this.ghostspeed[i] = VALID_SPEEDS[random];
 			}
-			this.ghostspeed[i] = VALID_SPEEDS[random];
 		}
 
 		this.pacmanx = 7 * BLOCK_SIZE;
@@ -588,8 +596,7 @@ public class Board extends JPanel implements ActionListener {
 			int distanceWallRight = distanceWallRight();
 			int distanceWallLeft = distanceWallLeft();
 			int distanceMonster = distanceClosestMonster();
-			int positionWithFood = distanceClosestFood();
-			distanceClosestFood();
+			// int positionWithFood = distanceClosestFood();
 			this.fis.setVariable("Wall_Front", distanceWallFront);
 			this.fis.setVariable("Wall_Right", distanceWallRight);
 			this.fis.setVariable("Wall_Left", distanceWallLeft);
@@ -600,8 +607,7 @@ public class Board extends JPanel implements ActionListener {
 			System.out.println(direction.getValue() + " front: " + distanceWallFront + " right: " + distanceWallRight
 					+ " left: " + distanceWallLeft);
 
-			boolean isIa = true;
-			if (0 < direction.getValue() && direction.getValue() < 10 && isIa) { // right
+			if (0 < direction.getValue() && direction.getValue() < 10 && this.hasFuzzy) { // right
 				switch (this.lastDiretion) {
 				case 1:
 					changeDirection(2);
@@ -620,7 +626,7 @@ public class Board extends JPanel implements ActionListener {
 				}
 			}
 
-			if (10 < direction.getValue() && direction.getValue() < 20 && isIa) { // left
+			if (10 < direction.getValue() && direction.getValue() < 20 && this.hasFuzzy) { // left
 				switch (this.lastDiretion) {
 				case 1:
 					changeDirection(4);
@@ -639,7 +645,7 @@ public class Board extends JPanel implements ActionListener {
 				}
 			}
 
-			if (20 < direction.getValue() && direction.getValue() < 30 && isIa) { // around
+			if (20 < direction.getValue() && direction.getValue() < 30 && this.hasFuzzy) { // around
 				switch (this.lastDiretion) {
 				case 1:
 					changeDirection(3);
@@ -658,7 +664,7 @@ public class Board extends JPanel implements ActionListener {
 				}
 			}
 
-			if (30 < direction.getValue() && direction.getValue() < 40 && isIa) { // random
+			if (30 < direction.getValue() && direction.getValue() < 40 && this.hasFuzzy) { // random
 				changeDirection(ThreadLocalRandom.current().nextInt(1, 5));
 			}
 
