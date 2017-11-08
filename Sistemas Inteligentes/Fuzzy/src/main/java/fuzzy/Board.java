@@ -49,13 +49,13 @@ public class Board extends JPanel implements ActionListener {
 	private static final int SCREEN_SIZE = NROFBLOCKS * BLOCK_SIZE;
 	private static final int PACMAN_ANIMDELAY = 2;
 	private static final int PACMAN_ANIMCOUNT = 4;
-	private static final int MAX_GHOSTS = 0;
+	private static final int MAX_GHOSTS = 12;
 	private static final int PACMAN_SPEED = 6;
 
 	int pacanimcount = PACMAN_ANIMDELAY;
 	int pacanimdir = 1;
 	int pacmananimpos = 0;
-	int nrofghosts = 0;
+	int nrofghosts = 6;
 	int pacsleft, score;
 	int deathcounter;
 	int[] dx, dy;
@@ -140,7 +140,7 @@ public class Board extends JPanel implements ActionListener {
 		} else {
 			movePacMan();
 			drawPacMan(g2d);
-			// moveGhosts(g2d);
+			moveGhosts(g2d);
 			checkMaze();
 		}
 	}
@@ -587,20 +587,21 @@ public class Board extends JPanel implements ActionListener {
 			int distanceWallFront = distanceWallFront();
 			int distanceWallRight = distanceWallRight();
 			int distanceWallLeft = distanceWallLeft();
-			// System.out.println(distanceClosestMonster());
+			int distanceMonster = distanceClosestMonster();
+			int positionWithFood = distanceClosestFood();
 			distanceClosestFood();
-
 			this.fis.setVariable("Wall_Front", distanceWallFront);
 			this.fis.setVariable("Wall_Right", distanceWallRight);
 			this.fis.setVariable("Wall_Left", distanceWallLeft);
-
+			this.fis.setVariable("Monster", distanceMonster);
+			// this.fis.setVariable("Food", positionWithFood);
 			this.fis.evaluate();
 			Variable direction = this.fis.getVariable("Direction");
-			// System.out.println(direction.getValue() + " front: " + distanceWallFront + "
-			// right: " + distanceWallRight
-			// + " left: " + distanceWallLeft);
-			// System.out.println(this.pacmandx + ";" + this.pacmandy);
-			if (0 < direction.getValue() && direction.getValue() < 10) { // right
+			System.out.println(direction.getValue() + " front: " + distanceWallFront + " right: " + distanceWallRight
+					+ " left: " + distanceWallLeft);
+
+			boolean isIa = true;
+			if (0 < direction.getValue() && direction.getValue() < 10 && isIa) { // right
 				switch (this.lastDiretion) {
 				case 1:
 					changeDirection(2);
@@ -619,7 +620,7 @@ public class Board extends JPanel implements ActionListener {
 				}
 			}
 
-			if (10 < direction.getValue() && direction.getValue() < 20) { // left
+			if (10 < direction.getValue() && direction.getValue() < 20 && isIa) { // left
 				switch (this.lastDiretion) {
 				case 1:
 					changeDirection(4);
@@ -638,7 +639,7 @@ public class Board extends JPanel implements ActionListener {
 				}
 			}
 
-			if (20 < direction.getValue() && direction.getValue() < 30) { // around
+			if (20 < direction.getValue() && direction.getValue() < 30 && isIa) { // around
 				switch (this.lastDiretion) {
 				case 1:
 					changeDirection(3);
@@ -657,7 +658,7 @@ public class Board extends JPanel implements ActionListener {
 				}
 			}
 
-			if (30 < direction.getValue() && direction.getValue() < 40) { // random
+			if (30 < direction.getValue() && direction.getValue() < 40 && isIa) { // random
 				changeDirection(ThreadLocalRandom.current().nextInt(1, 5));
 			}
 
@@ -755,13 +756,22 @@ public class Board extends JPanel implements ActionListener {
 			int pos = 0;
 			if (isX) {
 				x = isAdd ? x + i : x - i;
+				x = x > 360 ? 360 : x;
 				pos = x / BLOCK_SIZE + NROFBLOCKS * (this.pacmany / BLOCK_SIZE);
 			} else {
 				y = isAdd ? y + i : y - i;
+				y = y > 360 ? 360 : y;
 				pos = this.pacmanx / BLOCK_SIZE + NROFBLOCKS * (y / BLOCK_SIZE);
 			}
 			short ch = this.screendata[pos];
-			if ((ch & s1) == s1 || currentPos != pos && (ch & s2) == s2) {
+			if ((ch & s1) == s1) {
+				if (i > 0) {
+					int r = 100 - i * 2 - BLOCK_SIZE;
+					return r < 0 ? 0 : r;
+				}
+				return 100 - i * 2;
+			}
+			if (currentPos != pos && (ch & s2) == s2) {
 				return 100 - i * 2;
 			}
 		}
@@ -785,13 +795,13 @@ public class Board extends JPanel implements ActionListener {
 			}
 
 			for (int i = 0; i < NROFBLOCKS * NROFBLOCKS; i++) {
-				if (i != 0) {
+				if (i != 0 && i % NROFBLOCKS != 0) {
 					graph.addEdge(Integer.toString(i), Integer.toString(i - 1), 10);
 				}
 				if (i > NROFBLOCKS) {
 					graph.addEdge(Integer.toString(i), Integer.toString(i - NROFBLOCKS), 10);
 				}
-				if (i + 1 < 225) {
+				if (i + 1 < 225 && (i + 1) % NROFBLOCKS != 0) {
 					graph.addEdge(Integer.toString(i), Integer.toString(i + 1), 10);
 				}
 				if (i + NROFBLOCKS < 225) {
@@ -851,8 +861,8 @@ public class Board extends JPanel implements ActionListener {
 		}
 
 		Collections.shuffle(positionsWithFood);
-		System.out.println(positionsWithFood.get(0) + " : " + currentPos);
-		return positionsWithFood.get(0);
+		Integer foodPos = positionsWithFood.get(0);
+		return foodPos - currentPos;
 	}
 
 }
