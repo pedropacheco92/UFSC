@@ -7,7 +7,7 @@ function Population(p, m, num) {
     this.mutationRate = m;
     this.perfectScore = 1;
 
-    this.best = "";
+    this.best = 0;
 
     this.population = [];
     for (let i = 0; i < num; i++){

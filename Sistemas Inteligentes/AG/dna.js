@@ -1,3 +1,6 @@
+const geneSize = 5;
+const mutationRate = 0.01;
+
 function DNA(genes) {
   // Recieves genes and create a dna object
   if (genes) {
@@ -13,32 +16,27 @@ function DNA(genes) {
       this.genes[i].setMag(maxforce);
     }
   }
-  // Performs a crossover with another member of the species
-  this.crossover = function(partner) {
-    var newgenes = [];
-    // Picks random midpoint
-    var mid = floor(random(this.genes.length));
+
+  // CROSSOVER
+  // faz o crossover com outro membro da espécie
+  this.crossover = function(outroDNA) {
+    let novosGenes = [];
     for (var i = 0; i < this.genes.length; i++) {
-      // If i is greater than mid the new gene should come from this partner
-      if (i > mid) {
-        newgenes[i] = this.genes[i];
-      }
-      // If i < mid new gene should come from other partners gene's
-      else {
-        newgenes[i] = partner.genes[i];
-      }
+        // se o random for maior que 0,5 pega o gene atual, senao pega o outro
+        novosGenes[i] = Math.random() >= 0.5 ? this.genes[i] : outroDNA.genes[i];
     }
-    // Gives DNA object an array
-    return new DNA(newgenes);
+    // retorna um novo DNA
+    return new DNA(novosGenes);
   }
 
-  // Adds random mutation to the genes to add variance.
-  this.mutation = function() {
+  //MUTAÇÂO
+  // adiciona uma mutação aleatória
+  this.mutation = function(mutationRate) {
     for (var i = 0; i < this.genes.length; i++) {
-      // if random number less than 0.01, new gene is then random vector
-      if (random(1) < 0.01) {
-        this.genes[i] = p5.Vector.random2D();
-        this.genes[i].setMag(maxforce);
+      // se o numero aletorio for menor que a taxa de mutação, é mutacionado o gene
+      if (Math.random() < mutationRate) {
+        // troca o bit do gene
+        this.genes[i] = genes[i] == 1 ? 0 : 1;        
       }
     }
   }
