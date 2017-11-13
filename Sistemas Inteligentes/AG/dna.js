@@ -1,8 +1,3 @@
-// Daniel Shiffman
-// http://codingtra.in
-// http://patreon.com/codingtrain
-// Code for: https://youtu.be/bGz7mv2vD6g
-
 function DNA(genes) {
   // Recieves genes and create a dna object
   if (genes) {
@@ -47,5 +42,4 @@ function DNA(genes) {
       }
     }
   }
-
 }
