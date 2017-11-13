@@ -1,19 +1,19 @@
-const geneSize = 5;
-const mutationRate = 0.01;
+const dnaSize = 5;
+const mutationRate = 0.05;
 
 function DNA(genes) {
-  // Recieves genes and create a dna object
+  // update a view com a taxa de mutação
+  $(".mutacao").text(Math.floor(mutationRate * 100) + "%");
+  // recebe os genes e cria um DNA
   if (genes) {
     this.genes = genes;
   }
-  // If no genes just create random dna
+  // se nao tem genes, cria um DNA aleatório
   else {
     this.genes = [];
-    for (var i = 0; i < lifespan; i++) {
-      // Gives random vectors
-      this.genes[i] = p5.Vector.random2D();
-      // Sets maximum force of vector to be applied to a rocket
-      this.genes[i].setMag(maxforce);
+    for (var i = 0; i < dnaSize; i++) {
+      // cria valores aleatórios
+      this.genes[i] = Math.random() >= 0.5 ? 1 : 0;
     }
   }
 

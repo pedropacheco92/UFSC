@@ -19,7 +19,7 @@ let items;
     $(".qtGen").text(0);
     $(".fitness").text('0%');
     $(".populacao").text(popmax);
-    $(".mutacao").text(Math.floor(mutationRate * 100) + "%");
+    // $(".mutacao").text(Math.floor(mutationRate * 100) + "%");
 
     population = new Population(target, mutationRate, popmax);
   }
