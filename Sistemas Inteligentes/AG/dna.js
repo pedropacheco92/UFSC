@@ -41,34 +41,28 @@ function DNA(genes) {
     }
   }
 
-      // We calculate the fitness of each chromosome by summing up the benefits of the items
-    // that are included in the knapsack, while making sure that the capacity of the knapsack is
-    // not exceeded. If the volume of the chromosome is greater than the capacity of the
-    // knapsack then one of the bits in the chromosome whose value is ‘1’ is inverted and the
-    // chromosome is checked again. Here is a flowchart of the fitness function algorithm:
-    // FITNESS
-    // calcula o fitness do elemento
-    this.fitness = function(target, items) {
-      let sumBenefits = 0;
-      let sumWeight = 0;
-      for (var i = 0; i < dnaSize; i++) {
-        let gene = this.genes[i];
-        // se eu tiver o gene
-        if (gene == 1){
-          // pego o peso eo custo e vou somando
-          sumBenefits += items[i*2];
-          sumWeight += items[(i*2)+1];
-        }
+  // FITNESS
+  // calcula o fitness do elemento
+  this.fitness = function(target, items) {
+    let sumBenefits = 0;
+    let sumWeight = 0;
+    for (var i = 0; i < dnaSize; i++) {
+      let gene = this.genes[i];
+      // se eu tiver o gene
+      if (gene == 1){
+        // pego o peso eo custo e vou somando
+        sumBenefits += items[i*2];
+        sumWeight += items[(i*2)+1];
       }
+    }
       
-      if (sumWeight > target){
-        let pos = Math.floor(Math.random() * (dnaSize) + 1) -1;
-        this.genes[pos] = this.genes[pos] == 1 ? 0 : 1;
-        return this.fitness(target, items);
-      } 
-
-      return sumBenefits;
-  }
+    if (sumWeight > target){
+      let pos = Math.floor(Math.random() * (dnaSize) + 1) -1;
+      this.genes[pos] = this.genes[pos] == 1 ? 0 : 1;
+      return this.fitness(target, items);
+     } 
+    return sumBenefits;
+ }
 
   this.evaluate = function(){
     for (var i = 0; i < dnaSize; i++) {
