@@ -1,4 +1,4 @@
-const popSize = 200;
+const popSize = 20;
 
 function Population(target, items) {
     // atualiza label da população
@@ -37,6 +37,7 @@ function Population(target, items) {
 
             // calcula porcentagem
             let fitnessPercentage = (fitness * 100) / this.target;
+            
             sumFitness += fitnessPercentage;
         }
         // atualiza o valor na tela
@@ -49,8 +50,8 @@ function Population(target, items) {
             // pega 2 elementos aleatorios do mating poll
             let pos1 = Math.floor(Math.random() * (popSize) + 1) -1;
             let pos2 = Math.floor(Math.random() * (popSize) + 1) -1;
-            let element1 = matingPool[pos1];
-            let element2 = matingPool[pos2];
+            let element1 = this.matingPool[pos1];
+            let element2 = this.matingPool[pos2];
 
             // faz o crossover entre esses dois elementos
             let child = element1.crossover(element2);
@@ -58,14 +59,24 @@ function Population(target, items) {
             child.mutation();
 
             // adiciona o filho na população
-            population[i] = child;
+            this.population[i] = child;
         }
     }
 
-    this.evaluate() = function() {
+    this.evaluate = function() {
+        // para cada elemento da população
+        for (var i = 0; i < popSize; i++){
+            // pega o dna e calcula o fitness em %
+            let dna = this.population[i];
+            let fitness = dna.fitness(target, items);
 
+            if (fitness == target){
+                $(".valor").text(fitness);
+                dna.evaluate();
+                console.log(dna);
+                return true;
+            }            
+        }
+        return false;
     }
-
-
-
 }

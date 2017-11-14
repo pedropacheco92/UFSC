@@ -69,4 +69,20 @@ function DNA(genes) {
 
       return sumBenefits;
   }
+
+  this.evaluate = function(){
+    for (var i = 0; i < dnaSize; i++) {
+      let s = ".p" + (i + 1);
+      console.log(s);
+      this.showGene(this.genes[i] == 1, s);    
+    }
+  }
+
+  this.showGene = function(b, s) {
+    if (b){
+      $(s).show();
+    } else {
+      $(s).hide();
+    } 
+  }
 }

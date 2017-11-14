@@ -10,24 +10,25 @@ $(document).ready(function() {
 
   function setup() {
   
-    $(".best").text('-');
-    $(".qtGen").text(0);
     $(".fitness").text('0%');
-
+    
     // cria uma nova população
     this.pop = new Population(target, items);
   }
   
-  function draw() {    
+  function draw() {
     for (var i = 0; i < maxGen; i++) {
       // calcula o fitness de toda a população e insere no mating pool
       this.pop.calcFitness();
       // cria a proxima geração
       this.pop.reproduce();
+      $(".qtGen").text(i);
+
+      let hasFinished = this.pop.evaluate();
+      if (hasFinished) {
+        break;
+      }
     }
-
-   
-
   }
 
   setup();

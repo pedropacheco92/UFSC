@@ -1,3 +1,38 @@
 .best {
     padding-bottom: 80px;
 }
+
+.p1 {
+    display: inline;
+    border: 1px solid black;
+    padding: 2px 12px 2px 12px;
+    background-color: lightgreen;
+}
+
+.p2 {
+    display: inline;
+    border: 1px solid black;
+    padding: 2px 1px 2px 1px;
+    background-color: lightgrey;
+}
+
+.p3 {
+    display: inline;
+    border: 1px solid black;
+    padding: 2px 4px 2px 4px;
+    background-color: lightyellow;
+}
+
+.p4 {
+    display: inline;
+    border: 1px solid black;
+    padding: 2px 1px 2px 1px;
+    background-color: lightcoral;
+}
+
+.p5 {
+    display: inline;
+    border: 1px solid black;
+    padding: 2px 4px 2px 4px;
+    background-color: lightblue;
+}
