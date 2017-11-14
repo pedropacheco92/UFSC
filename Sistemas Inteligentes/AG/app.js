@@ -16,11 +16,15 @@ $(document).ready(function() {
 
     // cria uma nova população
     this.pop = new Population(target, items);
-    pop.createMatingPool();
   }
-
-  function draw() {
-    let newPop = [];
+  
+  function draw() {    
+    for (var i = 0; i < maxGen; i++) {
+      // calcula o fitness de toda a população e insere no mating pool
+      this.pop.calcFitness();
+      // cria a proxima geração
+      this.pop.reproduce();
+    }
 
    
 

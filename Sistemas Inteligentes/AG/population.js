@@ -23,7 +23,7 @@ function Population(target, items) {
     this.matingPool = [];
 
     // cria o mating poll
-    this.createMatingPool = function() {
+    this.calcFitness = function() {
         let sumFitness = 0;
         // para cada elemento da população
         for (var i = 0; i < popSize; i++){
@@ -35,10 +35,35 @@ function Population(target, items) {
                 this.matingPool.push(dna);
             }
 
+            // calcula porcentagem
             let fitnessPercentage = (fitness * 100) / this.target;
             sumFitness += fitnessPercentage;
         }
-        $(".fitness").text(sumFitness/popSize);
+        // atualiza o valor na tela
+        $(".fitness").text(Math.floor(sumFitness/popSize) + "%");
+    }
+
+    // faz a reprodução dos elementos
+    this.reproduce = function() {
+        for (var i = 0; i < popSize; i++){
+            // pega 2 elementos aleatorios do mating poll
+            let pos1 = Math.floor(Math.random() * (popSize) + 1) -1;
+            let pos2 = Math.floor(Math.random() * (popSize) + 1) -1;
+            let element1 = matingPool[pos1];
+            let element2 = matingPool[pos2];
+
+            // faz o crossover entre esses dois elementos
+            let child = element1.crossover(element2);
+            // faz uma possível mutação do filho
+            child.mutation();
+
+            // adiciona o filho na população
+            population[i] = child;
+        }
+    }
+
+    this.evaluate() = function() {
+
     }
 
 

@@ -31,7 +31,7 @@ function DNA(genes) {
 
   // MUTAÇÂO
   // adiciona uma mutação aleatória
-  this.mutation = function(mutationRate) {
+  this.mutation = function() {
     for (var i = 0; i < dnaSize; i++) {
       // se o numero aletorio for menor que a taxa de mutação, é mutacionado o gene
       if (Math.random() < mutationRate) {
