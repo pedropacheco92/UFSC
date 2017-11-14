@@ -1,7 +1,8 @@
-const dnaSize = 5;
 const mutationRate = 0.01;
+let dnaSize = 0;
 
-function DNA(genes) {
+function DNA(genes, dnaSize) {
+  this.dnaSize = dnaSize;
   // update a view com a taxa de mutação
   $(".mutacao").text(Math.floor(mutationRate * 100) + "%");
   // recebe os genes e cria um DNA
@@ -21,18 +22,18 @@ function DNA(genes) {
   // faz o crossover com outro membro da espécie
   this.crossover = function(outroDNA) {
     let novosGenes = [];
-    for (var i = 0; i < dnaSize; i++) {
+    for (var i = 0; i < this.dnaSize; i++) {
         // se o random for maior que 0,5 pega o gene atual, senao pega o outro
         novosGenes[i] = Math.random() >= 0.5 ? this.genes[i] : outroDNA.genes[i];
     }
     // retorna um novo DNA
-    return new DNA(novosGenes);
+    return new DNA(novosGenes, this.dnaSize);
   }
 
   // MUTAÇÂO
   // adiciona uma mutação aleatória
   this.mutation = function() {
-    for (var i = 0; i < dnaSize; i++) {
+    for (var i = 0; i < this.dnaSize; i++) {
       // se o numero aletorio for menor que a taxa de mutação, é mutacionado o gene
       if (Math.random() < mutationRate) {
         // troca o bit do gene
@@ -43,25 +44,26 @@ function DNA(genes) {
 
   // FITNESS
   // calcula o fitness do elemento
-  this.fitness = function(target, items) {
+  this.fitness = function(target, pesos, valores) {
     let sumBenefits = 0;
     let sumWeight = 0;
-    for (var i = 0; i < dnaSize; i++) {
+    for (var i = 0; i < this.dnaSize; i++) {
       let gene = this.genes[i];
       // se eu tiver o gene
       if (gene == 1){
         // pego o peso eo custo e vou somando
-        sumBenefits += items[i*2];
-        sumWeight += items[(i*2)+1];
+        sumBenefits += valores[i];
+        sumWeight += pesos[i];
       }
     }
-      
+
+    // se a soma dos valores for maior que o limite, remove um item aleatóriamente e recalcula o fitness
     if (sumWeight > target){
-      let pos = Math.floor(Math.random() * (dnaSize) + 1) -1;
+      let pos = Math.floor(Math.random() * (this.dnaSize) + 1) -1;
       this.genes[pos] = this.genes[pos] == 1 ? 0 : 1;
-      return this.fitness(target, items);
+      return this.fitness(target, pesos, valores);
      } 
-    return sumBenefits;
+    return [sumBenefits, sumWeight];
  }
 
   this.evaluate = function(){

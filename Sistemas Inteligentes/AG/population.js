@@ -1,11 +1,12 @@
 const popSize = 20;
 
-function Population(target, items) {
+function Population(target, pesos, valores) {
     // atualiza label da população
     $(".populacao").text(popSize);
 
     this.target = target;
-    this.items = items;
+    this.pesos = pesos;
+    this.valores = valores;
 
     this.population;
     this.matingPool;
@@ -17,7 +18,7 @@ function Population(target, items) {
 
     this.population = [];
     for (var i = 0; i < popSize; i++){
-        this.population[i] = new DNA(null);
+        this.population[i] = new DNA(null, valores.length);
     }
 
     this.matingPool = [];
@@ -29,14 +30,14 @@ function Population(target, items) {
         for (var i = 0; i < popSize; i++){
             // pega o dna e calcula o fitness em %
             let dna = this.population[i];
-            let fitness = dna.fitness(target, items);
+            let fitness = dna.fitness(target, pesos, valores);
             // para cada valor em fitness, adiciona um membro no mating poll
-            for (var j = 0; j < fitness; j++){
+            for (var j = 0; j < fitness[0]; j++){
                 this.matingPool.push(dna);
             }
 
             // calcula porcentagem
-            let fitnessPercentage = (fitness * 100) / this.target;
+            let fitnessPercentage = (fitness[0] * 100) / this.target;
             
             sumFitness += fitnessPercentage;
         }
@@ -68,10 +69,10 @@ function Population(target, items) {
         for (var i = 0; i < popSize; i++){
             // pega o dna e calcula o fitness em %
             let dna = this.population[i];
-            let fitness = dna.fitness(target, items);
-
-            if (fitness == target){
-                $(".valor").text(fitness);
+            let fitness = dna.fitness(target, this.pesos, this.valores);
+            console.log(fitness);
+            if (fitness[1] <= target){
+                $(".valor").text(fitness[0]);
                 dna.evaluate();
                 console.log(dna);
                 return true;

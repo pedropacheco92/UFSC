@@ -1,7 +1,9 @@
 // valor total da mochila
-const target = 15
-// possíveis items, pareados valor-peso
-const items = [4, 12, 2, 1, 10, 4, 1, 1, 2, 2];
+const target = 6;
+// pesos
+const pesos = [12, 1, 4, 1, 2];
+// valores 
+const valores =[4, 2, 10, 1, 2];
 // tamanho máximo de gerações
 const maxGen = 1000;
 
@@ -13,7 +15,7 @@ $(document).ready(function() {
     $(".fitness").text('0%');
     
     // cria uma nova população
-    this.pop = new Population(target, items);
+    this.pop = new Population(target, pesos, valores);
   }
   
   function draw() {
