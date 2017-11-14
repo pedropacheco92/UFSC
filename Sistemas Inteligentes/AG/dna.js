@@ -67,7 +67,6 @@ function DNA(genes) {
   this.evaluate = function(){
     for (var i = 0; i < dnaSize; i++) {
       let s = ".p" + (i + 1);
-      console.log(s);
       this.showGene(this.genes[i] == 1, s);    
     }
   }
