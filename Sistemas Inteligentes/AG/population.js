@@ -65,19 +65,36 @@ function Population(target, pesos, valores) {
     }
 
     this.evaluate = function() {
+        let allFitness = [];
+        let sumFitness = [];
         // para cada elemento da população
-        for (var i = 0; i < popSize; i++){
+        for (var i = 0; i < popSize; i++) {
             // pega o dna e calcula o fitness em %
             let dna = this.population[i];
             let fitness = dna.fitness(target, this.pesos, this.valores);
-            console.log(fitness);
-            if (fitness[1] <= target){
-                $(".valor").text(fitness[0]);
-                dna.evaluate();
-                console.log(dna);
-                return true;
-            }            
+
+            let contains = false;
+            for (var k = 0; k < allFitness.length; k++) {
+                if (allFitness[k][0] == fitness[0] && allFitness[k][1] == fitness[1]){
+                    sumFitness[k]++;
+                    contains = true;
+                    break;
+                }
+            }
+
+            if (!contains) {
+                allFitness.push(fitness)
+                sumFitness.push(1);
+            }         
         }
-        return false;
+
+        let targetPercent = (popSize * 9) / 10;
+        for (var i = 0; i < sumFitness.length; i++) {
+            if (sumFitness[i] >= targetPercent){
+                return allFitness[i];
+            }
+        }
+
+        return null;
     }
 }

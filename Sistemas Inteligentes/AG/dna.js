@@ -1,18 +1,19 @@
 const mutationRate = 0.01;
 let dnaSize = 0;
+let genes;
 
-function DNA(genes, dnaSize) {
-  this.dnaSize = dnaSize;
+function DNA(g, d) {
+  this.dnaSize = d;
   // update a view com a taxa de mutação
-  $(".mutacao").text(Math.floor(mutationRate * 100) + "%");
+  $(".mutacao").text(Math.floor(this.mutationRate * 100) + "%");
   // recebe os genes e cria um DNA
-  if (genes) {
-    this.genes = genes;
+  if (g != null) {
+    this.genes = g;
   }
   // se nao tem genes, cria um DNA aleatório
   else {
     this.genes = [];
-    for (var i = 0; i < dnaSize; i++) {
+    for (var i = 0; i < this.dnaSize; i++) {
       // cria valores aleatórios
       this.genes[i] = Math.random() >= 0.5 ? 1 : 0;
     }
@@ -35,9 +36,9 @@ function DNA(genes, dnaSize) {
   this.mutation = function() {
     for (var i = 0; i < this.dnaSize; i++) {
       // se o numero aletorio for menor que a taxa de mutação, é mutacionado o gene
-      if (Math.random() < mutationRate) {
+      if (Math.random() < this.mutationRate) {
         // troca o bit do gene
-        this.genes[i] = genes[i] == 1 ? 0 : 1;        
+        this.genes[i] = this.genes[i] == 1 ? 0 : 1;        
       }
     }
   }
