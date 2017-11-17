@@ -1,6 +1,7 @@
-const popSize = 100;
+const popSize = 1000;
 
-function Population(target, pesos, valores) {
+class Population {
+    constructor(target, pesos, valores) {
     // atualiza label da população
 
     // $(".populacao").text(popSize);
@@ -24,8 +25,9 @@ function Population(target, pesos, valores) {
     }
 
     this.matingPool = [];
+}
 
-    this.calcFitness = function() {
+    calcFitness() {
         // para cada elemento da população
         for (var i = 0; i < popSize; i++){
             this.population[i].calcFitness(target, pesos, valores);
@@ -33,7 +35,7 @@ function Population(target, pesos, valores) {
     }
     
     // cria o mating poll
-    this.naturalSelection = function() {
+    naturalSelection() {
         // limpa o array
         this.matingPool = [];
         
@@ -56,7 +58,7 @@ function Population(target, pesos, valores) {
     }
 
     // faz a reprodução dos elementos
-    this.reproduce = function() {
+    reproduce() {
         for (var i = 0; i < popSize; i++){
             // pega 2 elementos aleatorios do mating poll
             let pos1 = Math.floor(Math.random() * (this.matingPool.length) + 1) -1;
@@ -74,7 +76,7 @@ function Population(target, pesos, valores) {
         }
     }
 
-    this.evaluate = function() {
+    evaluate() {
         // calcula o fitness da nova população
         let allFitness = [];
         let sumFitness = [];

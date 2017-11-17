@@ -1,11 +1,11 @@
 // valor total da mochila
-const target = 6;
+const target = 15;
 // pesos
 const pesos = [12, 1, 4, 1, 2];
 // valores 
 const valores = [4, 2, 10, 1, 2];
 // tamanho máximo de gerações
-const maxGen = 100;
+const maxGen = 1000;
 
 
 // $(document).ready(function() {

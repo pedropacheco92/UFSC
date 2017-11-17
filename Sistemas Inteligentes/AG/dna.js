@@ -4,11 +4,12 @@ let genes;
 let fitness = 0;
 let volume = 0;
 
-function DNA(g, d) {
+class DNA {
+  constructor(g, d) {
   this.dnaSize = d;
   // update a view com a taxa de mutação
   // $(".mutacao").text(Math.floor(this.mutationRate * 100) + "%");
-  document.getElementById("mutacao").innerHTML = this.mutationRate * 100 + "%";
+  document.getElementById("mutacao").innerHTML = mutationRate * 100 + "%";
   // recebe os genes e cria um DNA
   if (g != null) {
     this.genes = g;
@@ -21,10 +22,10 @@ function DNA(g, d) {
       this.genes[i] = Math.random() >= 0.5 ? 1 : 0;
     }
   }
-
+}
   // CROSSOVER
   // faz o crossover com outro membro da espécie
-  this.crossover = function(outroDNA) {
+  crossover(outroDNA) {
     let novosGenes = [];
     for (var i = 0; i < this.dnaSize; i++) {
         // se o random for maior que 0,5 pega o gene atual, senao pega o outro
@@ -36,10 +37,10 @@ function DNA(g, d) {
 
   // MUTAÇÂO
   // adiciona uma mutação aleatória
-  this.mutation = function() {
+  mutation() {
     for (var i = 0; i < this.dnaSize; i++) {
       // se o numero aletorio for menor que a taxa de mutação, é mutacionado o gene
-      if (Math.random() < this.mutationRate) {
+      if (Math.random() < mutationRate) {
         // troca o bit do gene
         this.genes[i] = this.genes[i] == 1 ? 0 : 1;        
       }
@@ -48,7 +49,7 @@ function DNA(g, d) {
 
   // FITNESS
   // calcula o fitness do elemento
-  this.calcFitness = function(target, pesos, valores) {
+  calcFitness(target, pesos, valores) {
     let sumBenefits = 0;
     let sumWeight = 0;
     for (var i = 0; i < this.dnaSize; i++) {
@@ -71,14 +72,14 @@ function DNA(g, d) {
      this.volume = sumWeight;
  }
 
-  this.evaluate = function(){
+  evaluate(){
     for (var i = 0; i < dnaSize; i++) {
       let s = ".p" + (i + 1);
       this.showGene(this.genes[i] == 1, s);    
     }
   }
 
-  this.showGene = function(b, s) {
+  showGene(b, s) {
     if (b){
       $(s).show();
     } else {
