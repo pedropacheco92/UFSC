@@ -1,5 +1,4 @@
 const mutationRate = 0.01;
-let dnaSize = 0;
 let genes;
 let fitness = 0;
 let volume = 0;
@@ -73,17 +72,20 @@ class DNA {
  }
 
   evaluate(){
-    for (var i = 0; i < dnaSize; i++) {
-      let s = ".p" + (i + 1);
+    for (var i = 0; i < this.dnaSize; i++) {
+      let s = "i" + i;
       this.showGene(this.genes[i] == 1, s);    
     }
   }
 
   showGene(b, s) {
+    var x = document.getElementById(s);
+    console.log(s);
     if (b){
-      $(s).show();
+        x.style.display = "inline";
+      
     } else {
-      $(s).hide();
+        x.style.display = "none";
     } 
   }
 }

@@ -14,6 +14,14 @@ window.onload = function() {
       // $(".fitness").text('0%');
       document.getElementById("fitness").innerHTML = "0%";
 
+      for (var i = 0; i < valores.length; i++) {
+        let e = document.createElement("p");
+        e.className = "item"
+        e.id = "i"+i;
+        e.innerHTML = "R$ " + valores[i] + " | " + pesos[i] + "kg"; 
+        document.getElementById("best").appendChild(e);
+      }
+
       // cria uma nova população
       this.pop = new Population(target, pesos, valores);
   }

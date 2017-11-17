@@ -109,11 +109,21 @@ class Population {
             aux.push(allFitness[i]*sumFitness[i]);
         }
         let sum = aux.reduce((a, b) => a + b, 0);
-        
-        document.getElementById("fitness").innerHTML = Math.floor(sum/aux.length) + "%";
+        let maxFitness = allFitness.reduce((p, v) =>  p > v ? p : v );
+        let avg = sum/popSize;
+
+        document.getElementById("fitness").innerHTML = Math.floor((100*avg)/maxFitness) + "%";
+            
         let targetPercent = (popSize * 9) / 10;
         for (var i = 0; i < sumFitness.length; i++) {
             if (sumFitness[i] >= targetPercent){
+                    for (var i = 0; i < popSize; i++) {
+                        if (this.population[i].fitness == maxFitness){
+                            this.population[i].evaluate();
+                            console.log(this.population[i])
+                            break;
+                        }
+                    }
                 return allFitness[i];
             }
         }
