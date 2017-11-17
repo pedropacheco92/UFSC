@@ -1,11 +1,14 @@
 const mutationRate = 0.01;
 let dnaSize = 0;
 let genes;
+let fitness = 0;
+let volume = 0;
 
 function DNA(g, d) {
   this.dnaSize = d;
   // update a view com a taxa de mutação
-  $(".mutacao").text(Math.floor(this.mutationRate * 100) + "%");
+  // $(".mutacao").text(Math.floor(this.mutationRate * 100) + "%");
+  document.getElementById("mutacao").innerHTML = this.mutationRate * 100 + "%";
   // recebe os genes e cria um DNA
   if (g != null) {
     this.genes = g;
@@ -45,7 +48,7 @@ function DNA(g, d) {
 
   // FITNESS
   // calcula o fitness do elemento
-  this.fitness = function(target, pesos, valores) {
+  this.calcFitness = function(target, pesos, valores) {
     let sumBenefits = 0;
     let sumWeight = 0;
     for (var i = 0; i < this.dnaSize; i++) {
@@ -62,9 +65,10 @@ function DNA(g, d) {
     if (sumWeight > target){
       let pos = Math.floor(Math.random() * (this.dnaSize) + 1) -1;
       this.genes[pos] = this.genes[pos] == 1 ? 0 : 1;
-      return this.fitness(target, pesos, valores);
-     } 
-    return [sumBenefits, sumWeight];
+      this.calcFitness(target, pesos, valores);
+     }
+     this.fitness = sumBenefits;
+     this.volume = sumWeight;
  }
 
   this.evaluate = function(){
