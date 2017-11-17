@@ -31,8 +31,7 @@ window.onload = function() {
 
       let hasFinished = this.pop.evaluate();
       if (hasFinished != null) {
-        console.log(hasFinished);
-        console.log(this.pop.population)
+        document.getElementById("valor").innerHTML = hasFinished;
         break;
       }
     }
@@ -41,4 +40,3 @@ window.onload = function() {
   setup();
   draw();
 }
-// });
