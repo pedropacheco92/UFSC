@@ -80,12 +80,10 @@ class DNA {
 
   showGene(b, s) {
     var x = document.getElementById(s);
-    console.log(s);
     if (b){
-        x.style.display = "inline";
-      
+        x.style.backgroundColor = "lightblue";      
     } else {
-        x.style.display = "none";
+        x.style.backgroundColor = "lightcoral";
     } 
   }
 }

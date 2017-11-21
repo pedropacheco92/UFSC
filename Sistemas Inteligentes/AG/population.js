@@ -25,23 +25,16 @@ class Population {
     this.matingPool = [];
 }
 
+    // cria o mating poll   
     calcFitness() {
         // para cada elemento da população
+        this.matingPool = [];
         for (var i = 0; i < popSize; i++){
             this.population[i].calcFitness(target, pesos, valores);
+            this.matingPool.push(this.population[i].fitness);
         }     
     }
     
-    // cria o mating poll
-    naturalSelection() {
-        // limpa o array
-        this.matingPool = [];
-
-        for (var i = 0; i < popSize; i++) {
-           this.matingPool.push(this.population[i].fitness);
-        }
-    }
-
     // faz a reprodução dos elementos
     reproduce() {
         let maxFitness = 0;
@@ -120,7 +113,6 @@ class Population {
                     for (var i = 0; i < popSize; i++) {
                         if (this.population[i].fitness == maxFitness){
                             this.population[i].evaluate();
-                            console.log(this.population[i])
                             break;
                         }
                     }

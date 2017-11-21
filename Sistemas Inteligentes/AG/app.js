@@ -8,12 +8,10 @@ const valores = [4, 2, 10, 1, 2];
 const maxGen = 1000;
 
 
-// $(document).ready(function() {
 window.onload = function() {
   function setup() {
-      // $(".fitness").text('0%');
       document.getElementById("fitness").innerHTML = "0%";
-
+      // cria os items na tela
       for (var i = 0; i < valores.length; i++) {
         let e = document.createElement("p");
         e.className = "item"
@@ -30,8 +28,6 @@ window.onload = function() {
     for (var i = 0; i < maxGen; i++) {
       // calcula o fitness de toda a população e insere no mating pool
       this.pop.calcFitness();
-
-      this.pop.naturalSelection();
       // cria a proxima geração
       this.pop.reproduce();
       // $(".qtGen").text(i);
