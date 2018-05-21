@@ -1,0 +1,17 @@
+programa asd;
+inteiro a = 12e33;
+real b = 666.666;
+cadeia[9] char = 'huehuehue';
+booleano asxsa = falso;
+real aaa;
+{
+b := 0;
+se (asxsa)
+entao
+escreva (char);
+enquanto (2 > 4)
+faca
+aaa := a + b;
+
+}
+.

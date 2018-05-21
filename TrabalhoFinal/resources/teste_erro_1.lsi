@@ -1,0 +1,11 @@
+programa asd;
+inteiro a = 12e33;
+real b = 666.666;
+caracter char = 'e';
+booleano asxsa = falso;
+{
+se (asxsa)
+entao
+escreva (asxsa);
+}
+.
