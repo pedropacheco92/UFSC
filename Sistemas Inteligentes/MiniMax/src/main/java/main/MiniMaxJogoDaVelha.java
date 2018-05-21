@@ -14,7 +14,7 @@ public class MiniMaxJogoDaVelha {
 	private boolean debug;
 
 	// jogada/pontuacao
-	public Jogada minimax(HashMap<Integer, Valor> tabuleiro, Valor jogador) {
+	public Jogada minimax(HashMap<Integer, Valor> tabuleiro, Valor jogador, Integer alfa, Integer beta) {
 		print("minimax de: " + jogador.getValue() + " e: " + tabuleiro);
 
 		// verifica os estados terminais, se ganhou perdeu ou empatou
@@ -53,10 +53,16 @@ public class MiniMaxJogoDaVelha {
 			// pega o resultado do minimax para aquela jogada, que dependendo do jogador do
 			// turno
 			if (jogador.equals(this.jogadorCPU)) {
-				Jogada result = minimax(tabuleiro, this.jogadorVerdadeiro);
+				Jogada result = minimax(tabuleiro, this.jogadorVerdadeiro, alfa, beta);
+				if (result.getPontuacao() > alfa) {
+					alfa = result.getPontuacao();
+				}
 				jogada = new Jogada(i, result.getPontuacao());
 			} else {
-				Jogada result = minimax(tabuleiro, this.jogadorCPU);
+				Jogada result = minimax(tabuleiro, this.jogadorCPU, alfa, beta);
+				if (result.getPontuacao() < beta) {
+					beta = result.getPontuacao();
+				}
 				jogada = new Jogada(i, result.getPontuacao());
 			}
 
@@ -65,6 +71,12 @@ public class MiniMaxJogoDaVelha {
 
 			// adiciona a possivel jogada na lista de jogadas
 			jogadas.add(jogada);
+
+			// realiza a poda alfa beta
+			if (alfa >= beta) {
+				print("podou, alfa: " + alfa + ", beta: " + beta);
+				break;
+			}
 		}
 
 		// reseta o tabuleiro para o estado original
