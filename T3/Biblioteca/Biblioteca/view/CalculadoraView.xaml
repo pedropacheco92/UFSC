@@ -1,0 +1,15 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Biblioteca.view"
+        xmlns:WpfControlCalculadora="clr-namespace:WpfControlCalculadora;assembly=WpfControlCalculadora" x:Class="Biblioteca.view.CalculadoraView"
+        mc:Ignorable="d"
+        Title="CalculadoraView" Height="343.697" Width="340.337">
+    <Grid Margin="0,0,2,3">
+
+        <WpfControlCalculadora:Calculadora HorizontalAlignment="Left" VerticalAlignment="Top" Width="332" Height="306"/>
+
+    </Grid>
+</Window>

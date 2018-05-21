@@ -1,0 +1,18 @@
+﻿<Window x:Class="Biblioteca.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Biblioteca"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="326.47" Width="284.804">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="0*"/>
+        </Grid.ColumnDefinitions>
+        <Button x:Name="button_emprestar" Content="Pegar livro" HorizontalAlignment="Left" Height="63" Margin="53,42,0,0" VerticalAlignment="Top" Width="168" Click="button_emprestar_Click"/>
+        <Button x:Name="button_devolver" Content="Devolver livro" HorizontalAlignment="Left" Height="63" Margin="53,120,0,0" VerticalAlignment="Top" Width="168" Click="button_devolver_Click"/>
+        <Button x:Name="button_historico" Content="Histórico" HorizontalAlignment="Left" Height="63" Margin="53,199,0,0" VerticalAlignment="Top" Width="168" Click="button_historico_Click"/>
+    </Grid>
+</Window>
