@@ -15,7 +15,7 @@ public class TokenRingProcess extends Thread {
 	private int next_port;
 
 	private ServerSocket welcomeSocket;
-	
+
 	private boolean wantsCriticalRegion = false;
 
 	public TokenRingProcess(int port, int next_port) {
@@ -51,9 +51,9 @@ public class TokenRingProcess extends Thread {
 				int randomNum = ThreadLocalRandom.current().nextInt(1, 5);
 				if (randomNum % 2 == 0) {
 					this.wantsCriticalRegion = true;
-				}				
+				}
 			}
-			
+
 			Socket connectionSocket = this.welcomeSocket.accept();
 			BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
 			token = inFromClient.readLine();
