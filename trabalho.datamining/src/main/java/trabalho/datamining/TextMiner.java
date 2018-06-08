@@ -1,25 +1,35 @@
 package trabalho.datamining;
 
-import java.sql.SQLException;
+import java.io.File;
+import java.io.IOException;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Scanner;
+import java.util.Set;
 
 import org.apache.commons.lang3.time.StopWatch;
 
+import com.google.common.base.CharMatcher;
+import com.google.common.base.Splitter;
+
 public class TextMiner {
 
-	private Map<String, List<Long>> listaInvertida = new HashMap<>();
+	private Map<String, Set<Long>> listaInvertida = new HashMap<>();
 
 	private Map<Long, String> registros = new HashMap<>();
 
-	public TextMiner() throws SQLException {
-		Jdbc jdbc = new Jdbc();
+	private List<String> stopwords = new ArrayList<>();
 
+	public TextMiner() throws Exception {
+		this.stopwords();
+
+		Jdbc jdbc = new Jdbc();
 		this.registros = jdbc.getData();
 
 		StopWatch stopWatch = new StopWatch();
@@ -28,24 +38,27 @@ public class TextMiner {
 		stopWatch.stop();
 		System.out.println("Tempo decorrido: " + stopWatch.getTime() + "ms");
 
-		this.listaInvertida.entrySet().stream().sorted((e1, e2) -> Integer.compare(e2.getValue().size(), e1.getValue().size())).forEach(System.out::println);
+		this.listaInvertida.entrySet().stream().sorted((e1, e2) -> Integer.compare(e2.getValue().size(), e1.getValue().size()))
+				.forEach(e -> System.out.println(e.getKey() + ": " + e.getValue()));
 	}
 
 	private void criaListaInvertida() {
 		for (Entry<Long, String> e : this.registros.entrySet()) {
-			for (String string : e.getValue().split(" ")) {
+			Iterable<String> tokens = Splitter.on(CharMatcher.anyOf(" ,./\\")).split(e.getValue());
+
+			tokens.forEach(string -> {
 				String s = this.clearString(string);
 
-				if (s.equals("")) {
-					continue;
+				if (s.equals("") || this.stopwords.contains(s)) {
+					return;
 				}
 
 				if (this.listaInvertida.containsKey(s)) {
 					this.listaInvertida.get(s).add(e.getKey());
 				} else {
-					this.listaInvertida.put(s, new ArrayList<>(Arrays.asList(e.getKey())));
+					this.listaInvertida.put(s, new HashSet<>(Arrays.asList(e.getKey())));
 				}
-			}
+			});
 		}
 	}
 
@@ -56,6 +69,19 @@ public class TextMiner {
 		string = string.replaceAll("[^a-zA-Z0-9]", "");
 
 		return string;
+	}
+
+	private void stopwords() throws IOException {
+		ClassLoader classLoader = Application.class.getClassLoader();
+		File file = new File(classLoader.getResource("stopwords.txt").getFile());
+		Scanner scanner = new Scanner(file);
+
+		while (scanner.hasNextLine()) {
+			String line = scanner.nextLine();
+			this.stopwords.add(this.clearString(line));
+		}
+
+		scanner.close();
 	}
 
 }
