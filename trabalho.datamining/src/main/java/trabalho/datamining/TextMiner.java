@@ -25,6 +25,8 @@ public class TextMiner {
 	private Map<Long, String> registros = new HashMap<>();
 
 	private List<String> stopwords = new ArrayList<>();
+	
+	private Set<Long> ids = new HashSet<>();
 
 	public TextMiner() throws Exception {
 		this.stopwords();
@@ -38,8 +40,14 @@ public class TextMiner {
 		stopWatch.stop();
 		System.out.println("Tempo decorrido: " + stopWatch.getTime() + "ms");
 
-		this.listaInvertida.entrySet().stream().sorted((e1, e2) -> Integer.compare(e2.getValue().size(), e1.getValue().size()))
-				.forEach(e -> System.out.println(e.getKey() + ": " + e.getValue()));
+//		this.listaInvertida.entrySet().stream().sorted((e1, e2) -> Integer.compare(e2.getValue().size(), e1.getValue().size()))
+//				.forEach(e -> System.out.println(e.getKey() + ": " + e.getValue()));
+		
+		
+		ids();
+		this.ids.stream().sorted(Long::compare).forEach(l -> System.out.print(l + ", "));
+		System.out.println("");
+		System.out.println("asdasd");
 	}
 
 	private void criaListaInvertida() {
@@ -83,5 +91,19 @@ public class TextMiner {
 
 		scanner.close();
 	}
+	
+	private void ids() throws IOException {
+//		ClassLoader classLoader = Application.class.getClassLoader();
+//		File file = new File(classLoader.getResource("items_casa.txt").getFile());
+//		Scanner scanner = new Scanner(file);
+//
+//		while (scanner.hasNextLine()) {
+//			String line = this.clearString(scanner.nextLine());
+//			this.ids.addAll(this.listaInvertida.get(line));
+//		}
+//
+//		scanner.close();
+		this.ids.addAll(this.listaInvertida.get("inseticida"));
+	}	
 
 }

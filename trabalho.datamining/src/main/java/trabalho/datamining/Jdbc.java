@@ -11,7 +11,7 @@ import java.util.Map;
 public class Jdbc {
 
 	String driver = "org.postgresql.Driver";
-	String user = "pedro";
+	String user = "postgres";
 	String senha = "root";
 	String url = "jdbc:postgresql://localhost:5432/datamining";
 	Connection con = null;
