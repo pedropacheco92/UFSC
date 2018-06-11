@@ -41,10 +41,10 @@ public class Client extends Thread {
 			sleep(200);
 			if (!cr) {
 				int randomNum = ThreadLocalRandom.current().nextInt(1, 30);
-				if (randomNum % 4 == 0) {
+				if (randomNum % 2 == 0) {
 					cr = true;
 					this.sendRequest();
-					System.out.println("Cliente " + port + " quer entrar na regi„o crÌtica!");
+					System.out.println("Cliente " + port + " quer entrar na regi√£o cr√≠tica!");
 				}
 			}
 
@@ -52,11 +52,13 @@ public class Client extends Thread {
 			BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
 			String token = inFromClient.readLine();
 			if (token.equals("token")) {
+				cr = false;
 				System.out.println("Cliente " + port + " recebeu token!");
 				sleep(200);
 				this.criticalRegion();
 				this.sendToken();
-				cr = false;
+			} else {
+				connectionSocket.close();
 			}
 		}
 
@@ -77,6 +79,6 @@ public class Client extends Thread {
 	}
 
 	private void criticalRegion() {
-		System.out.println("Cliente " + port + " est· na regi„o crÌtica");
+		System.out.println("Cliente " + port + " est√° na regi√£o cr√≠tica");
 	}
 }

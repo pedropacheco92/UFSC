@@ -45,14 +45,16 @@ public class Server extends Thread {
 			BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
 
 			String clientSentence = inFromClient.readLine();
-			if (clientSentence.equals("token") && nonNull(currentClient)) {
-				System.out.println("Servidor: " + currentClient + " saiu da regi„o crÌtica!");
+			if (clientSentence.equals("token")) {
+				if (nonNull(currentClient)) {
+					System.out.println("Servidor: " + currentClient + " saiu da regi√£o cr√≠tica!");
+				}
 				currentClient = null;
 			} else {
 				try {
 					Integer client = Integer.parseInt(clientSentence);
 					currentClient = client;
-					System.out.println("Servidor: " + client + " deseja acessar regi„o crÌtica!");
+					System.out.println("Servidor: " + client + " deseja acessar regi√£o cr√≠tica!");
 					this.sendToken(client);
 				} catch (NumberFormatException e) {
 					System.out.println("Mensagem desconhecida: " + clientSentence);

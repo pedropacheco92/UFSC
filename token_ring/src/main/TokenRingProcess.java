@@ -21,7 +21,7 @@ public class TokenRingProcess extends Thread {
 	public TokenRingProcess(int port, int next_port) {
 		this.port = port;
 		this.next_port = next_port;
-		print("iniciado");
+		this.print("iniciado");
 	}
 
 	@Override
@@ -35,45 +35,45 @@ public class TokenRingProcess extends Thread {
 
 	public void sendToken() throws IOException, InterruptedException {
 		sleep(1000);
-		Socket clientSocket = new Socket("localhost", this.next_port);
+		Socket clientSocket = new Socket("localhost", next_port);
 		DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
 		outToServer.writeBytes("token");
-		print("enviado token para: " + this.next_port);
+		this.print("enviado token para: " + next_port);
 		clientSocket.close();
 	}
 
 	public void reciveToken() throws IOException, InterruptedException {
 		String token;
-		this.welcomeSocket = new ServerSocket(this.port);
+		welcomeSocket = new ServerSocket(port);
 
 		while (true) {
-			if (!this.wantsCriticalRegion) {
+			if (!wantsCriticalRegion) {
 				int randomNum = ThreadLocalRandom.current().nextInt(1, 5);
 				if (randomNum % 2 == 0) {
-					this.wantsCriticalRegion = true;
+					wantsCriticalRegion = true;
 				}
 			}
 
-			Socket connectionSocket = this.welcomeSocket.accept();
+			Socket connectionSocket = welcomeSocket.accept();
 			BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
 			token = inFromClient.readLine();
 			if (token.equals("token")) {
-				print("recebeu token");
+				this.print("recebeu token");
 				sleep(1000);
-				if (this.wantsCriticalRegion) {
+				if (wantsCriticalRegion) {
 					this.criticalRegion();
-					this.wantsCriticalRegion = false;
+					wantsCriticalRegion = false;
 				}
-				sendToken();
+				this.sendToken();
 			}
 		}
 	}
 
 	private void print(String s) {
-		System.out.println("Processo " + this.port + ": " + s);
+		System.out.println("Processo " + port + ": " + s);
 	}
 
 	private void criticalRegion() {
-		print("Fazendo coisas na regi„o crÌtica");
+		this.print("Fazendo coisas na regi√£o cr√≠tica");
 	}
 }
