@@ -16,6 +16,8 @@ public class MulticastClient extends Thread {
 
 	private int id;
 
+	private boolean cr;
+
 	public MulticastClient(int id) {
 		this.id = id;
 	}
@@ -61,12 +63,18 @@ public class MulticastClient extends Thread {
 			Thread.sleep(2000);
 			int randomNum = ThreadLocalRandom.current().nextInt(1, 30);
 			if (randomNum % 6 == 0) {
+				cr = true;
 				String msg = Long.toString(new Date().getTime());
 				DatagramPacket msgPacket = new DatagramPacket(msg.getBytes(), msg.getBytes().length, address, PORT);
 
 				serverSocket.send(msgPacket);
-				System.out.println(id + " quer regição crítica com tempo: " + msg);
+				System.out.println(id + " quer região crítica com tempo: " + msg);
 			}
 		}
 	}
+
+	private void criticalRegion() {
+		System.out.println("Região crítica");
+	}
+
 }
