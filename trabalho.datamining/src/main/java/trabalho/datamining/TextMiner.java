@@ -93,17 +93,17 @@ public class TextMiner {
 	}
 	
 	private void ids() throws IOException {
-//		ClassLoader classLoader = Application.class.getClassLoader();
-//		File file = new File(classLoader.getResource("items_casa.txt").getFile());
-//		Scanner scanner = new Scanner(file);
-//
-//		while (scanner.hasNextLine()) {
-//			String line = this.clearString(scanner.nextLine());
-//			this.ids.addAll(this.listaInvertida.get(line));
-//		}
-//
-//		scanner.close();
-		this.ids.addAll(this.listaInvertida.get("inseticida"));
+		ClassLoader classLoader = Application.class.getClassLoader();
+		File file = new File(classLoader.getResource("items_casa.txt").getFile());
+		Scanner scanner = new Scanner(file);
+
+		while (scanner.hasNextLine()) {
+			String line = this.clearString(scanner.nextLine());
+			this.ids.addAll(this.listaInvertida.get(line));
+		}
+
+		scanner.close();
+//		this.ids.addAll(this.listaInvertida.get("inseticida"));
 	}	
 
 }
