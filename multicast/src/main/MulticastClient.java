@@ -47,7 +47,7 @@ public class MulticastClient extends Thread {
 					clientSocket.receive(msgPacket);
 					String msg = new String(buf, 0, buf.length);
 
-					System.out.println(this.id + " recebeu msg: " + msg);
+					System.out.println(id + " recebeu msg: " + msg);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -65,7 +65,7 @@ public class MulticastClient extends Thread {
 				DatagramPacket msgPacket = new DatagramPacket(msg.getBytes(), msg.getBytes().length, address, PORT);
 
 				serverSocket.send(msgPacket);
-				System.out.println(this.id + " quer regição crítica com tempo: " + msg);
+				System.out.println(id + " quer regição crítica com tempo: " + msg);
 			}
 		}
 	}
