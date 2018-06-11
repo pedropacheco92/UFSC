@@ -8,28 +8,23 @@ import java.net.Socket;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Client extends Thread {
-	
-	private int port;
-	
-	private boolean wantsCriticalRegion = false;
 
-	private ServerSocket socket;
-	
+	private int port;
+
+	private boolean cr = false;
+
+	private ServerSocket welcomeSocket;
+
 	public Client(int port) {
 		this.port = port;
 	}
-	
+
 	@Override
 	public synchronized void start() {
 		super.start();
 		System.out.println("Cliente " + port + " iniciou");
-		try {
-			sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
-	
+
 	@Override
 	public void run() {
 		try {
@@ -38,42 +33,50 @@ public class Client extends Thread {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void createClient() throws Exception {
-		while(true) {
-			int randomNum = ThreadLocalRandom.current().nextInt(1, 5);
-			if (randomNum % 2 == 0 && !wantsCriticalRegion) {
-				System.out.println("Cliente " + this.port + " quer entrar na região crítica!");
-				Socket clientSocket = new Socket("localhost", 1);
-				DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
-				outToServer.writeBytes(String.valueOf(port));
-				clientSocket.close();
-				this.wantsCriticalRegion = true;
-			}
-			
-			if (this.wantsCriticalRegion) {
-				socket = new ServerSocket(this.port);
-				Socket connectionSocket = socket.accept();				
-				BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
-				
-				String clientMsg = inFromClient.readLine();
-				System.out.println(clientMsg + "aaaaaaaaa");
-				if (clientMsg.equals("token")) {
-					critialRegion();
-					DataOutputStream outToServer = new DataOutputStream(connectionSocket.getOutputStream());
-					outToServer.writeBytes("token");
-					connectionSocket.close();
-					wantsCriticalRegion = false;
+		welcomeSocket = new ServerSocket(port);
+
+		while (true) {
+			sleep(200);
+			if (!cr) {
+				int randomNum = ThreadLocalRandom.current().nextInt(1, 30);
+				if (randomNum % 4 == 0) {
+					cr = true;
+					this.sendRequest();
+					System.out.println("Cliente " + port + " quer entrar na região crítica!");
 				}
-				socket.close();
 			}
-			
-			
-			
-		}		
+
+			Socket connectionSocket = welcomeSocket.accept();
+			BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
+			String token = inFromClient.readLine();
+			if (token.equals("token")) {
+				System.out.println("Cliente " + port + " recebeu token!");
+				sleep(200);
+				this.criticalRegion();
+				this.sendToken();
+				cr = false;
+			}
+		}
+
 	}
-	
-	private void critialRegion() {
-		System.out.println("Cliente " + this.port + " está na região crítica");
+
+	private void sendRequest() throws Exception {
+		Socket clientSocket = new Socket("localhost", 99);
+		DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
+		outToServer.writeBytes(String.valueOf(port));
+		clientSocket.close();
+	}
+
+	private void sendToken() throws Exception {
+		Socket clientSocket = new Socket("localhost", 99);
+		DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
+		outToServer.writeBytes("token");
+		clientSocket.close();
+	}
+
+	private void criticalRegion() {
+		System.out.println("Cliente " + port + " está na região crítica");
 	}
 }
