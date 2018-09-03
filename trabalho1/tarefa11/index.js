@@ -40,7 +40,6 @@ app.post('/login', (req, res) => {
     } else {
         res.send('usuario errado');
     }
-
 });
 
 app.post('/', (req, res) => {
