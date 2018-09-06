@@ -5,6 +5,8 @@ const CryptoJS = require("crypto-js");
 const jsonfile = require('jsonfile')
 const bcrypt = require('bcrypt');
 const Random = require('crypto-random');
+const Base64 = require('js-base64').Base64;
+const secureRandom = require('secure-random')
 
 const app = express();
 
@@ -15,54 +17,63 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(morgan('dev'));
+app.set('view engine', 'ejs')
 
 app.get('/', (req, res) => {
-    res.render('index.html');
+    res.render('home.ejs', {text: 123});
 });
 
 app.post('/login', (req, res) => {
-    const user = {
-        user: "btuztrZd2m8tIPBCDPKw98rRZfRQoZEn4EzRhkpX6Kw=",
-        password: "$2b$13$1bQ7w10t0.PbseBxWSTJ7esOdBaEaKw76ENrhwEU6FTl1mhHtbcbe"
-    };
+    const users = jsonfile.readFileSync(file);
 
-    const userHashed = CryptoJS.HmacSHA256(req.body.user, '123');
-    const base64 = CryptoJS.enc.Base64.stringify(userHashed);
-
-    if (user.user === base64) {
-        bcrypt.compare(req.body.password, user.password, function (err, r) {
-            if (r === true) {
-                res.send('deu boa');
-            } else {
-                res.send('senha errado');
+    for (const user of users) {
+        const key = `${req.body.user}${user.salt}`
+        const userHashed = Base64.encode(CryptoJS.HmacSHA256(req.body.user, key));
+        if (userHashed === user.user) {
+            const passOk = bcrypt.compareSync(req.body.password, user.password);
+            if (passOk === true) {
+                res.sendFile(__dirname + '/home.html');
+                return;
             }
-        });
-    } else {
-        res.send('usuario errado');
+        }
     }
+
+    res.sendFile(__dirname + '/error.html');
 });
 
 app.post('/', (req, res) => {
-    const userHashed = CryptoJS.HmacSHA256(req.body.user, '123');
-    const base64 = CryptoJS.enc.Base64.stringify(userHashed);
+    const users = jsonfile.readFileSync(file);
 
-    bcrypt.genSalt(Random.range(10, 20), function (err, salt) {
+    for (const user of users) {
+        const key = `${req.body.user}${user.salt}`
+        const userHashed = Base64.encode(CryptoJS.HmacSHA256(req.body.user, key));
+        if (userHashed === user.user) {
+            res.send('Usuário já existe').end();
+            return;
+        }
+    }
+
+    const random = Base64.encode(secureRandom(6));
+    const key = `${req.body.user}${random}`;
+    const userHashed = Base64.encode(CryptoJS.HmacSHA256(req.body.user, key));
+
+    bcrypt.genSalt(Random.range(6, 13), function (err, salt) {
         bcrypt.hash(req.body.password, salt, function (err, hash) {
-            // Store hash in your password DB.
+
             const user = {
-                user: base64,
-                password: hash
+                user: userHashed,
+                password: hash,
+                salt: random
             }
 
-            jsonfile.writeFile(file, user, {
-                flag: 'a'
-            }, function (err) {
+            users.push(user);
+
+            jsonfile.writeFile(file, users, function (err) {
                 console.error(err)
             });
             res.send(user);
         });
     });
-
 
     // res.render('index.html');
 });

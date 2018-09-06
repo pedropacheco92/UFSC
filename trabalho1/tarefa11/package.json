@@ -14,8 +14,11 @@
     "body-parser": "^1.18.3",
     "crypto-js": "^3.1.9-1",
     "crypto-random": "^1.0.3",
+    "ejs": "^2.6.1",
     "express": "^4.16.3",
+    "js-base64": "^2.4.9",
     "jsonfile": "^4.0.0",
-    "morgan": "^1.9.0"
+    "morgan": "^1.9.0",
+    "secure-random": "^1.1.1"
   }
 }

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>INE5680</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="login-page">
+        <div class="form">
+            <form class="register-form">
+                <input class="form-input" type="text" placeholder="Usuário" />
+                <input class="form-input" type="password" placeholder="Senha" />
+                <input type="submit" class="submit-button" value="criar">
+                <p class="message">Já tem conta? <a id="click1" href="#">Entrar</a></p>
+            </form>
+            <form class="login-form" action="/login" method="post">
+                <input class="form-input" type="text" name="user" placeholder="Usuário" />
+                <input class="form-input" type="password" name="password" placeholder="Senha" />
+                <input type="submit" class="submit-button" value="login">
+                <p class="message">Não está registrado? <a id="click2" href="#">Cria uma conta</a></p>
+            </form>
+        </div>
+    </div>
+    <script>
+        $('#click1').click(() => {
+            $('form').animate({
+                height: "toggle",
+                opacity: "toggle"
+            }, "slow");
+        });
+        $('#click2').click(() => {
+            $('form').animate({
+                height: "toggle",
+                opacity: "toggle"
+            }, "slow");
+        });
+    </script>
+</body>
+
+</html>
