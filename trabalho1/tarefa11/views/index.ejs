@@ -12,13 +12,13 @@
 <body>
     <div class="login-page">
         <div class="form">
-            <form class="register-form" action="/user" method="post">
-                <input class="form-input" type="text" placeholder="Usuário" />
-                <input class="form-input" type="password" placeholder="Senha" />
+            <form class="register-form" action="/user" method="POST">
+                <input class="form-input" type="text" name="user" placeholder="Usuário" />
+                <input class="form-input" type="password" name="password" placeholder="Senha" />
                 <input type="submit" class="submit-button" value="criar">
                 <p class="message">Já tem conta? <a id="click1" href="#">Entrar</a></p>
             </form>
-            <form class="login-form" action="/login" method="post">
+            <form class="login-form" action="/login" method="POST">
                 <input class="form-input" type="text" name="user" placeholder="Usuário" />
                 <input class="form-input" type="password" name="password" placeholder="Senha" />
                 <input type="submit" class="submit-button" value="login">

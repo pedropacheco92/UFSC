@@ -27,10 +27,6 @@ app.get('/', (req, res) => {
     res.render('index.ejs');
 });
 
-app.get('/x', (req, res) => res.render('home.ejs', {
-    text: 'Usuário já existe!'
-}));
-
 app.post('/login', (req, res) => {
     const users = jsonfile.readFileSync(file);
 
@@ -90,10 +86,60 @@ app.post('/user', (req, res) => {
             jsonfile.writeFile(file, users, function (err) {
                 console.error(err)
             });
-            res.send(user);
+
+            res.render('error.ejs', {
+                text: 'Usuário criado!'
+            });
         });
     });
 
+});
+
+app.post('/delete-user', (req, res) => {
+    const users = jsonfile.readFileSync(file);
+    const newUsers = [];
+
+    for (const user of users) {
+        const key = `${req.body.user}${user.salt}`
+        const userHashed = Base64.encode(CryptoJS.HmacSHA256(req.body.user, key));
+        if (userHashed !== user.user) {
+            newUsers.push(user);
+        }
+    }
+
+    jsonfile.writeFile(file, newUsers, function (err) {
+        console.error(err);
+    });
+
+    res.render('error.ejs', {
+        text: 'Usuário deletado!'
+    });
+});
+
+app.post('/update-user', (req, res) => {
+    const users = jsonfile.readFileSync(file);
+
+    for (const user of users) {
+        const key = `${req.body.user}${user.salt}`
+        const userHashed = Base64.encode(CryptoJS.HmacSHA256(req.body.user, key));
+        if (userHashed === user.user) {
+            bcrypt.genSalt(Random.range(6, 13), function (err, salt) {
+                bcrypt.hash(req.body.password, salt, function (err, hash) {
+        
+                    user.password = hash;
+        
+                    jsonfile.writeFile(file, users, function (err) {
+                        console.error(err)
+                    });
+        
+                    res.render('error.ejs', {
+                        text: 'Senha alterada!'
+                    });
+                });
+            });
+            break;
+        }
+    }
 });
 
 const options = {

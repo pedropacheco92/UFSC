@@ -46,7 +46,8 @@
 
 .submit-button:hover,
 .submit-button:active,
-.submit-button:focus {
+.submit-button:focus,
+.button:hover {
     background: #43A047;
 }
 
@@ -131,4 +132,31 @@ body {
     margin: auto;
     text-align: center;
     padding-top: 34%;
+}
+
+.button {
+    margin: 10px;
+    text-align: center;
+    font-family: "Roboto", sans-serif;
+    text-transform: uppercase;
+    outline: 0;
+    background: #4CAF50;
+    width: 150px;
+    border: 0;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    color: #FFFFFF;
+    font-size: 14px;
+    -webkit-transition: all 0.3 ease;
+    transition: all 0.3 ease;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.div-button {
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 }

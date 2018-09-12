@@ -7,19 +7,41 @@
     <title>INE5680</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <div class="home-div">        
+    <div class="home-div" style="height: 400px">
         <p style="text-align: center; padding-top: 30px">
-            Olá <%= user %>
+            Olá
+            <%= user %>
         </p>
 
-        <div>
-            <button>Deletar</button>
-            <button>Alterar Senha</button>
+        <div class="div-button" style="height: 65%">
+            <div style="display: flex; flex-direction: row;">
+                <form action="/delete-user" method="POST">
+                    <input style="display: none" type="text" value="<%= user %>" name="user" placeholder="Senha" />
+                    <button type="submit" class="button">Deletar</button>
+                </form>
+                <button class="button" id="alterar">Alterar Senha</button>
+            </div>
+            <div id="div-senha">
+                <form action="/update-user" method="POST">
+                    <input style="display: none" type="text" value="<%= user %>" name="user" placeholder="Senha" />
+                    <input class="form-input" type="password" name="password" placeholder="Senha" />
+                    <button type="submit" class="button">Confirmar</button>
+                </form>
+            </div>
+            <a class="button" style="position: relative; top: 50px;" href="/">Sair</a>
         </div>
     </div>
+    <script>
+        $('#div-senha').css('display', 'none');
+        $('#alterar').click(() => {
+            $('#div-senha').css('display', 'block');
+        });
+    </script>
 </body>
 
 </html>
