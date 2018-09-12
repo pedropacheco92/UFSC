@@ -7,10 +7,14 @@ const bcrypt = require('bcrypt');
 const Random = require('crypto-random');
 const Base64 = require('js-base64').Base64;
 const secureRandom = require('secure-random')
+const fs = require('fs')
+const https = require('https')
 
 const app = express();
 
-const file = 'users.json'
+const file = 'users.json';
+
+// openssl req -x509 -newkey rsa:4096 -keyout server.key -out server.cert -days 365 -nodes -subj '/CN=localhost'
 
 app.use(express.static(__dirname));
 app.use(bodyParser.urlencoded({
@@ -20,8 +24,12 @@ app.use(morgan('dev'));
 app.set('view engine', 'ejs')
 
 app.get('/', (req, res) => {
-    res.render('home.ejs', {text: 123});
+    res.render('index.ejs');
 });
+
+app.get('/x', (req, res) => res.render('home.ejs', {
+    text: 'Usuário já existe!'
+}));
 
 app.post('/login', (req, res) => {
     const users = jsonfile.readFileSync(file);
@@ -32,23 +40,34 @@ app.post('/login', (req, res) => {
         if (userHashed === user.user) {
             const passOk = bcrypt.compareSync(req.body.password, user.password);
             if (passOk === true) {
-                res.sendFile(__dirname + '/home.html');
+                res.render('home.ejs', {
+                    user: req.body.user
+                });
+                return;
+            } else {
+                res.render('error.ejs', {
+                    text: 'Senha incorreta!'
+                });
                 return;
             }
         }
     }
 
-    res.sendFile(__dirname + '/error.html');
+    res.render('error.ejs', {
+        text: 'Usuário incorreto!'
+    });
 });
 
-app.post('/', (req, res) => {
+app.post('/user', (req, res) => {
     const users = jsonfile.readFileSync(file);
 
     for (const user of users) {
         const key = `${req.body.user}${user.salt}`
         const userHashed = Base64.encode(CryptoJS.HmacSHA256(req.body.user, key));
         if (userHashed === user.user) {
-            res.send('Usuário já existe').end();
+            res.render('error.ejs', {
+                text: 'Usuário já existe!'
+            });
             return;
         }
     }
@@ -75,7 +94,15 @@ app.post('/', (req, res) => {
         });
     });
 
-    // res.render('index.html');
+});
+
+const options = {
+    key: fs.readFileSync('server.key'),
+    cert: fs.readFileSync('server.cert')
+};
+
+https.createServer(options, app).listen(3000, () => {
+    console.log('App HTTPS listening on port 3000! Go to https://localhost:3000/')
 });
 
 app.listen(8081, () => console.log('App listening on port 8081!'));
