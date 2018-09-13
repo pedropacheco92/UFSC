@@ -72,7 +72,7 @@ app.post('/user', (req, res) => {
     const key = `${req.body.user}${random}`;
     const userHashed = Base64.encode(CryptoJS.HmacSHA256(req.body.user, key));
 
-    bcrypt.genSalt(Random.range(6, 13), function (err, salt) {
+    bcrypt.genSalt(Random.range(8, 13), function (err, salt) {
         bcrypt.hash(req.body.password, salt, function (err, hash) {
 
             const user = {
@@ -123,7 +123,7 @@ app.post('/update-user', (req, res) => {
         const key = `${req.body.user}${user.salt}`
         const userHashed = Base64.encode(CryptoJS.HmacSHA256(req.body.user, key));
         if (userHashed === user.user) {
-            bcrypt.genSalt(Random.range(6, 13), function (err, salt) {
+            bcrypt.genSalt(Random.range(8, 13), function (err, salt) {
                 bcrypt.hash(req.body.password, salt, function (err, hash) {
         
                     user.password = hash;

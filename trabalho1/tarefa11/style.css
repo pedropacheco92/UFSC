@@ -160,3 +160,8 @@ body {
     justify-content: center;
     flex-direction: column;
 }
+
+#div-senha {
+    width: 320px;
+    margin-top: 30px;
+}

@@ -18,7 +18,7 @@
             <%= user %>
         </p>
 
-        <div class="div-button" style="height: 65%">
+        <div class="div-button">
             <div style="display: flex; flex-direction: row;">
                 <form action="/delete-user" method="POST">
                     <input style="display: none" type="text" value="<%= user %>" name="user" placeholder="Senha" />
@@ -30,16 +30,20 @@
                 <form action="/update-user" method="POST">
                     <input style="display: none" type="text" value="<%= user %>" name="user" placeholder="Senha" />
                     <input class="form-input" type="password" name="password" placeholder="Senha" />
-                    <button type="submit" class="button">Confirmar</button>
+                    <button type="submit" class="button" style="margin-left: 85px;">Confirmar</button>
                 </form>
             </div>
-            <a class="button" style="position: relative; top: 50px;" href="/">Sair</a>
+            <a class="button" style="position: relative; top: 20px;" href="/">Sair</a>
         </div>
     </div>
     <script>
-        $('#div-senha').css('display', 'none');
+        $('#div-senha').css('visibility', 'hidden');
         $('#alterar').click(() => {
-            $('#div-senha').css('display', 'block');
+            if ($('#div-senha').css('visibility') == 'hidden') {
+                $('#div-senha').css('visibility', 'visible');
+            } else {
+                $('#div-senha').css('visibility', 'hidden');
+            }
         });
     </script>
 </body>
