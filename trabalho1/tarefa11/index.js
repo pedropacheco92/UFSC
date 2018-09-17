@@ -5,10 +5,8 @@ const CryptoJS = require("crypto-js");
 const jsonfile = require('jsonfile')
 const bcrypt = require('bcrypt');
 const Random = require('crypto-random');
-const Base64 = require('js-base64').Base64;
-const secureRandom = require('secure-random')
-const fs = require('fs')
-const https = require('https')
+const fs = require('fs');
+const https = require('https');
 
 const app = express();
 
