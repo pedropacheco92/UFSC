@@ -1,0 +1,95 @@
+CONNECTED(00000003)
+---
+Certificate chain
+ 0 s:/C=BR/ST=SC/L=Florianopolis/O=UNIVERSIDADE FEDERAL DE SANTA CATARINA/CN=*.homologacao.ufsc.br
+   i:/C=BR/ST=Rio de Janeiro/L=Rio de Janeiro/OU=Gerencia de Servicos (GSer)/O=Rede Nacional de Ensino e Pesquisa - RNP/CN=ICPEdu
+ 1 s:/C=BR/ST=Rio de Janeiro/L=Rio de Janeiro/OU=Gerencia de Servicos (GSer)/O=Rede Nacional de Ensino e Pesquisa - RNP/CN=ICPEdu
+   i:/C=BE/OU=Trusted Root/O=GlobalSign nv-sa/CN=Trusted Root CA SHA256 G2
+ 2 s:/C=BE/OU=Trusted Root/O=GlobalSign nv-sa/CN=Trusted Root CA SHA256 G2
+   i:/OU=GlobalSign Root CA - R3/O=GlobalSign/CN=GlobalSign
+---
+Server certificate
+-----BEGIN CERTIFICATE-----
+MIIHDjCCBfagAwIBAgIMM1FhMYw5mJaMfR1WMA0GCSqGSIb3DQEBCwUAMIGpMQsw
+CQYDVQQGEwJCUjEXMBUGA1UECBMOUmlvIGRlIEphbmVpcm8xFzAVBgNVBAcTDlJp
+byBkZSBKYW5laXJvMSQwIgYDVQQLExtHZXJlbmNpYSBkZSBTZXJ2aWNvcyAoR1Nl
+cikxMTAvBgNVBAoTKFJlZGUgTmFjaW9uYWwgZGUgRW5zaW5vIGUgUGVzcXVpc2Eg
+LSBSTlAxDzANBgNVBAMTBklDUEVkdTAeFw0xODA2MTQxMTQ2MDRaFw0yMDA2MTQx
+MTQ2MDRaMIGDMQswCQYDVQQGEwJCUjELMAkGA1UECBMCU0MxFjAUBgNVBAcTDUZs
+b3JpYW5vcG9saXMxLzAtBgNVBAoTJlVOSVZFUlNJREFERSBGRURFUkFMIERFIFNB
+TlRBIENBVEFSSU5BMR4wHAYDVQQDDBUqLmhvbW9sb2dhY2FvLnVmc2MuYnIwggEi
+MA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDjD6eAAoJHedhmf4ktsrc3/rry
+R7DKru9ke2NZsHq34XKcMzBswC+QYqSGqFilv3T/3BgrNQh/I5P0fNZS2x2tcuhn
+LVEa6IPjLxMCpHMbPeSdzNlFvkZfW2W611k7Rz6qh3RbOi9S79GQSM9tANCcPcDD
+prt1ufI7wW4LUOwh/S6y6GwSnqxmVxm3lmu2JlqUfQb/T6cz49SH+4xvinBxavSY
+fjfjQvqgjNDdOjpfINPRUKcDxTjslQLTGfkEpiv6YwhIF5xN1rJeIAr5M8SVRT3H
+21c2NsoXU+mb55xY+H8/Nh1iMtP02lxnYXTX7M2p1jYLy3RPVnoP0lecmxFRAgMB
+AAGjggNYMIIDVDAOBgNVHQ8BAf8EBAMCBaAwgYYGCCsGAQUFBwEBBHoweDBABggr
+BgEFBQcwAoY0aHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvaWNw
+ZWR1c2hhMmcyLmNydDA0BggrBgEFBQcwAYYoaHR0cDovL29jc3AyLmdsb2JhbHNp
+Z24uY29tL2ljcGVkdXNoYTJnMjBWBgNVHSAETzBNMEEGCSsGAQQBoDIBFDA0MDIG
+CCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5
+LzAIBgZngQwBAgIwCQYDVR0TBAIwADA+BgNVHR8ENzA1MDOgMaAvhi1odHRwOi8v
+Y3JsLmdsb2JhbHNpZ24uY29tL2dzL2ljcGVkdXNoYTJnMi5jcmwwNQYDVR0RBC4w
+LIIVKi5ob21vbG9nYWNhby51ZnNjLmJyghNob21vbG9nYWNhby51ZnNjLmJyMB0G
+A1UdJQQWMBQGCCsGAQUFBwMBBggrBgEFBQcDAjAdBgNVHQ4EFgQUXNMWPNCzD0PQ
+H4Agtpp3NeMZ5wMwHwYDVR0jBBgwFoAUlfCkhBqnXCA2psUI12VCAuV3aOMwggF+
+BgorBgEEAdZ5AgQCBIIBbgSCAWoBaAB2AFWB1MIWkDYBSuoLm1c8U/DA5Dh4cCUI
+Fy+jqh0HE9MMAAABY/4d9AkAAAQDAEcwRQIhAJSHloktO042pnQV10UV1lTk7BOV
+yZS5LZHH/Cwr/ZyKAiBFpY8wcSRotes5jKpBLGi0Bx0ote9VQp3JUnmfFz5S4wB3
+AId1v+dZfPiMQ5lfvfNu/1aNR1Y2/0q1YMG06v9eoIMPAAABY/4d9fAAAAQDAEgw
+RgIhAImXZl3UmNcPb0TwfSjs4xtSxEZ64LPLdf8pAWupXuXMAiEA3fx0pRTTO0Fw
+k40/+PiSOfETlRnf5Zojr32uWGPNvUkAdQCkuQmQtBhYFIe7E6LMZ3AKPDWYBPkb
+37jjd80OyA3cEAAAAWP+Hfd5AAAEAwBGMEQCIAvlA2Y0Rk2c4WZyCBpLjMB8kxmJ
+bzcKTXE+BXSOhp3+AiAZXcLoYp0JsElLzZBeSnpY2wti8dNJxSJEa6WTrK1cFDAN
+BgkqhkiG9w0BAQsFAAOCAQEARIE7yHRbqZxBSz+JyPG8QDHVqjxbcDEX9pJk8ZcI
+JDWja86kzm/hFYi2ujzDmao+Twwj8mDp9KkULvDQFaqTxzdW+BYCS9Nng4zr0XvJ
+FrXwja89FPYUpHjYPLCaVnn+lkdFKIUSRhl+zNdt0ouCBcdYHYfwN9H7qRuoyGh0
+FapoNRA5t8xZGxgm1rqiunOGhfg+qyifvSXR1zl/NyQ9Jn7grbLj0kJid25wy1QU
+l05QKUGE7KcBGoN3FZ1ORDxrs/FZwrZc7T79UKyEJBbjvYChT5Ih6WJfxsnK4iQe
+BBH2hoPc5i0LydjeYZMQjDttPZJGiZHZYx2Z/mTaA8Zpgg==
+-----END CERTIFICATE-----
+subject=/C=BR/ST=SC/L=Florianopolis/O=UNIVERSIDADE FEDERAL DE SANTA CATARINA/CN=*.homologacao.ufsc.br
+issuer=/C=BR/ST=Rio de Janeiro/L=Rio de Janeiro/OU=Gerencia de Servicos (GSer)/O=Rede Nacional de Ensino e Pesquisa - RNP/CN=ICPEdu
+---
+No client certificate CA names sent
+Peer signing digest: SHA512
+Server Temp Key: ECDH, P-256, 256 bits
+---
+SSL handshake has read 4920 bytes and written 302 bytes
+Verification: OK
+---
+New, TLSv1.2, Cipher is ECDHE-RSA-AES256-GCM-SHA384
+Server public key is 2048 bit
+Secure Renegotiation IS supported
+Compression: NONE
+Expansion: NONE
+No ALPN negotiated
+SSL-Session:
+    Protocol  : TLSv1.2
+    Cipher    : ECDHE-RSA-AES256-GCM-SHA384
+    Session-ID: A17F9A8E2A87EF2BB5388D515FB703C15932A1D42D8F1F757FCD900E1B8AADBF
+    Session-ID-ctx: 
+    Master-Key: 84E147AF6EB63F53F6E43974504B5B4F993D67A35844437ADAE6C7AFF325C8DD44DDF7BE4CA029A7E8A9CD1EC3A8F748
+    PSK identity: None
+    PSK identity hint: None
+    SRP username: None
+    TLS session ticket lifetime hint: 600 (seconds)
+    TLS session ticket:
+    0000 - 63 6d c4 f4 f2 7b 55 48-a2 f3 28 72 e5 7c 11 63   cm...{UH..(r.|.c
+    0010 - 16 c1 8e b4 3b 9e 9a 16-c6 4b 53 6f 72 ad 05 51   ....;....KSor..Q
+    0020 - 9f 72 b9 da eb 1d dc 9d-84 b5 50 03 19 52 f3 f3   .r........P..R..
+    0030 - 8b fa dd 52 f4 66 b6 01-53 79 4b b2 d7 11 fe 43   ...R.f..SyK....C
+    0040 - b9 5b d4 37 06 06 d5 75-9d 64 d6 3d 7f 0e 41 50   .[.7...u.d.=..AP
+    0050 - 7d 2e d6 97 a3 4a fe 4c-7a 4d e8 0e 65 63 3f a0   }....J.LzM..ec?.
+    0060 - b2 6f 34 c0 dd b3 4f 6a-7f 06 20 0f 28 4f aa 40   .o4...Oj.. .(O.@
+    0070 - 79 bf 8f d8 fe 83 26 9b-55 42 98 21 9e 35 df 97   y.....&.UB.!.5..
+    0080 - 61 da cd 61 be 8a bd 1d-4c 73 54 b2 20 7a bc 65   a..a....LsT. z.e
+    0090 - d6 54 65 db 52 d6 b1 fa-3e f9 97 4c b4 74 67 e4   .Te.R...>..L.tg.
+    00a0 - 1d 97 03 e4 7b b7 e5 1f-1f df 9a 2e b8 ff b9 6f   ....{..........o
+
+    Start Time: 1540129896
+    Timeout   : 7200 (sec)
+    Verify return code: 0 (ok)
+    Extended master secret: no
+---
