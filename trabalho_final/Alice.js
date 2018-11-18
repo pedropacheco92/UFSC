@@ -10,6 +10,4 @@ class Alice {
 
 }
 
-// https://stackoverflow.com/questions/8750780/encrypting-data-with-public-key-in-node-js
-
 new Alice();
