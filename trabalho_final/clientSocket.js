@@ -1,31 +1,25 @@
-var W3CWebSocket = require('websocket').w3cwebsocket;
+const W3CWebSocket = require('websocket').w3cwebsocket;
 
-var client = new W3CWebSocket('ws://localhost:8080/', 'echo-protocol');
+const client = new W3CWebSocket('ws://localhost:8080/', 'echo-protocol');
+const stdin = process.openStdin();
 
-client.onerror = function() {
+client.onerror = () => {
     console.log('Connection Error');
 };
 
-client.onopen = function() {
+client.onopen = () => {
     console.log('WebSocket Client Connected');
-
-    function sendNumber() {
-        if (client.readyState === client.OPEN) {
-            var number = Math.round(Math.random() * 0xFFFFFF);
-            client.send(number.toString());
-            console.log(`Enviando ${number}`)
-            setTimeout(sendNumber, 1000);
-        }
-    }
-    sendNumber();
+    stdin.addListener("data", function (d) {
+        client.send(d.toString().trim());
+    });
 };
 
-client.onclose = function() {
-    console.log('echo-protocol Client Closed');
+client.onclose = () => {
+    console.log('Cliente fechou a conexão!');
 };
 
-client.onmessage = function(e) {
+client.onmessage = function (e) {
     if (typeof e.data === 'string') {
-        // console.log("Received: '" + e.data + "'");
+        console.log(`Recebi: ${e.data}`);
     }
 };
