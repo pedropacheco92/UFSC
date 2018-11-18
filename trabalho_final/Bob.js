@@ -1,15 +1,32 @@
-class Bob {
+const secureRandom = require('secure-random');
+const socket = require('./sockets/serverSocket');
+const auth = require('./crypt/auth');
+const stdin = process.openStdin();
 
-    constructor() {
-        this.run();
-    }
+const id = secureRandom(32, { type: 'Buffer' }).toString("hex");
+const privB = './crypt/keys/server/private.pem';
 
-    run() {
-        console.log('Rodando Bob....');
-    }
-    
-    createSocket
-
+const run = () => {
+    console.log('Rodando Bob....');
+    console.log(`ID: ${id}`);
+    createSocket();
+    messageListener();
 }
 
-new Bob();
+const handleMessage = (message) => {
+    console.log(message);
+}
+
+const createSocket = () => {
+    socket.init(handleMessage);
+    auth.handleAuthServer(socket, privB);
+}
+
+const messageListener = () => {
+    stdin.addListener("data", function (d) {
+        socket.sendMessage(d.toString().trim());
+    });
+}
+
+
+run();
