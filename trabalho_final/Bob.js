@@ -19,7 +19,12 @@ const handleMessage = (message) => {
 
 const createSocket = () => {
     socket.init(handleMessage);
-    auth.handleAuthServer(socket, privB);
+    auth.handleAuthServer(socket, privB, id, afterAuth);
+}
+
+const afterAuth = (key) => {
+    console.log('Chave criada: ' + key)
+    socket.setCallBack(handleMessage);
 }
 
 const messageListener = () => {

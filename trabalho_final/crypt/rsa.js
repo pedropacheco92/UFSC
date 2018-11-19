@@ -8,13 +8,13 @@ const encryptWithPublicKey = (toEncrypt, pathString) => {
     const publicKey = fs.readFileSync(absolutePath, "utf8");
     const buffer = Buffer.from(toEncrypt);
     const encrypted = crypto.publicEncrypt(publicKey, buffer);
-    return encrypted.toString("base64");
+    return encrypted.toString("hex");
 };
 
 const decryptWithPrivateKey = (toDecrypt, pathString) => {
     const absolutePath = path.resolve(pathString);
     const privateKey = fs.readFileSync(absolutePath, "utf8");
-    const buffer = Buffer.from(toDecrypt, "base64");
+    const buffer = Buffer.from(toDecrypt, "hex");
     const decrypted = crypto.privateDecrypt(privateKey, buffer);
     return decrypted.toString("utf8");
 };
@@ -24,13 +24,13 @@ const encryptWithPrivateKey = (toEncrypt, pathString) => {
     const privateKey = fs.readFileSync(absolutePath, "utf8");
     const buffer = Buffer.from(toEncrypt);
     const encrypted = crypto.privateEncrypt(privateKey, buffer);
-    return encrypted.toString("base64");
+    return encrypted.toString("hex");
 };
 
 const decryptWithPublicKey = (toDecrypt, pathString) => {
     const absolutePath = path.resolve(pathString);
     const publicKey = fs.readFileSync(absolutePath, "utf8");
-    const buffer = Buffer.from(toDecrypt, "base64");
+    const buffer = Buffer.from(toDecrypt, "hex");
     const decrypted = crypto.publicDecrypt(publicKey, buffer);
     return decrypted.toString("utf8");
 };
