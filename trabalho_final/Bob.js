@@ -1,10 +1,12 @@
 const secureRandom = require('secure-random');
 const socket = require('./sockets/serverSocket');
 const auth = require('./crypt/auth');
+const aes = require('./crypt/aes');
 const stdin = process.openStdin();
 
 const id = secureRandom(32, { type: 'Buffer' }).toString("hex");
 const privB = './crypt/keys/server/private.pem';
+let key;
 
 const run = () => {
     console.log('Rodando Bob....');
@@ -14,7 +16,8 @@ const run = () => {
 }
 
 const handleMessage = (message) => {
-    console.log(message);
+    console.log(message)
+    console.log(aes.decrypt(message, key));
 }
 
 const createSocket = () => {
@@ -22,14 +25,15 @@ const createSocket = () => {
     auth.handleAuthServer(socket, privB, id, afterAuth);
 }
 
-const afterAuth = (key) => {
-    console.log('Chave criada: ' + key)
+const afterAuth = (k) => {
+    key = k;
+    console.log('Chave criada: ' + k)
     socket.setCallBack(handleMessage);
 }
 
 const messageListener = () => {
     stdin.addListener("data", function (d) {
-        socket.sendMessage(d.toString().trim());
+        socket.sendMessage(aes.encrypt(d.toString().trim(), key));
     });
 }
 

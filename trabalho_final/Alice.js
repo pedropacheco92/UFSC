@@ -1,12 +1,13 @@
 const secureRandom = require('secure-random');
+// const ecdh = crypto.createECDH('secp256k1');
 const socket = require('./sockets/clientSocket');
 const auth = require('./crypt/auth');
+const aes = require('./crypt/aes');
 const stdin = process.openStdin();
 
 const id = secureRandom(32, { type: 'Buffer' }).toString("hex");
 const privA = './crypt/keys/client/private.pem';
-
-const autenticado = false;
+let key;
 
 const run = () => {
     console.log('Rodando Alice....');
@@ -16,7 +17,8 @@ const run = () => {
 }
 
 const handleMessage = (message) => {
-    console.log(message);
+    console.log(message)
+    console.log(aes.decrypt(message, key));
 }
 
 const createSocket = () => {
@@ -24,7 +26,8 @@ const createSocket = () => {
     auth.handleAuthClient(socket, privA, id, afterAuth);    
 }
 
-const afterAuth = (key) => {
+const afterAuth = (k) => {
+    key = k;
     console.log('Chave criada: ' + key)
     socket.setCallBack(handleMessage);
 }
@@ -32,7 +35,9 @@ const afterAuth = (key) => {
 const messageListener = () => {
     stdin.addListener("data", function (d) {
         const msg = d.toString().trim();
-        socket.sendMessage(msg);
+        if (key) {
+            socket.sendMessage(aes.encrypt(msg, key));
+        }
     });
 }
 
