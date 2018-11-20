@@ -1,22 +1,26 @@
-const crypto = require('crypto');
-const secureRandom = require('secure-random');
-const algorithm = 'aes-256-cbc';
-const iv = Buffer.alloc(16);
+const aesjs = require('aes-js');
 
-const encrypt = (text, key) => {
-    console.log(key);
-    console.log(.toString('hex'));
-    let cipher = crypto.createCipheriv(algorithm, Buffer.alloc(32), iv)
-    let crypted = cipher.update(text, 'utf8', 'hex')
-    crypted += cipher.final('hex');
-    return crypted;
+const encrypt = (text, pubKey, key, iv) => {
+    const textBytes = aesjs.utils.utf8.toBytes(text + pubKey);
+    const diff = 16 - (textBytes.length % 16);
+
+    const aesCbc = new aesjs.ModeOfOperation.cbc(aesjs.utils.hex.toBytes(key), iv);
+    const encryptedBytes = aesCbc.encrypt([...textBytes, ...new Uint8Array(diff)]);
+
+    const encryptedHex = aesjs.utils.hex.fromBytes([ ...encryptedBytes, ...iv]);
+    return encryptedHex;
 }
 
 const decrypt = (text, key) => {
-    let decipher = crypto.createDecipheriv(algorithm, key, iv)
-    let dec = decipher.update(text, 'hex', 'utf8')
-    dec += decipher.final('utf8');
-    return dec;
+    const encryptedBytes = aesjs.utils.hex.toBytes(text);
+    const iv = encryptedBytes.slice(encryptedBytes.length - 16, encryptedBytes.length);
+    const encrypted = encryptedBytes.slice(0, encryptedBytes.length - 16);
+
+    const aesCbc = new aesjs.ModeOfOperation.cbc(aesjs.utils.hex.toBytes(key), iv);
+    const decryptedBytes = aesCbc.decrypt(encrypted);
+
+    const decryptedText = aesjs.utils.utf8.fromBytes(decryptedBytes.filter(b => b != 0));
+    return decryptedText;
 }
 
 module.exports = { encrypt, decrypt };

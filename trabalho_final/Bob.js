@@ -16,8 +16,10 @@ const run = () => {
 }
 
 const handleMessage = (message) => {
-    console.log(message)
-    console.log(aes.decrypt(message, key));
+    const text = aes.decrypt(message, key);
+    const pubKeyAlice = text.slice(text.length - 130, text.length);
+    const msg = text.slice(0, text.length - 130);
+    console.log(msg);
 }
 
 const createSocket = () => {
