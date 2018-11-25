@@ -7,8 +7,14 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
+            "name": "Alice",
             "program": "${workspaceFolder}/Alice.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Bob",
+            "program": "${workspaceFolder}/Bob.js"
         }
     ]
 }

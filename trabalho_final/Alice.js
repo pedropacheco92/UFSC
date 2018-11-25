@@ -9,6 +9,8 @@ const stdin = process.openStdin();
 const id = secureRandom(32, { type: 'Buffer' }).toString("hex");
 const privA = './crypt/keys/client/private.pem';
 let key;
+let dhPubB;
+let dhPrivA;
 
 const run = () => {
     console.log('Rodando Alice....');
@@ -18,8 +20,17 @@ const run = () => {
 }
 
 const handleMessage = (message) => {
-    console.log(message)
-    console.log(aes.decrypt(message, key));
+    // console.log('RECIEBED: ' + message);
+    dhPubB = message.slice(message.length - 130, message.length);
+    // console.log('R PrivA: ' + dhPrivA);
+    // console.log('R PubB: ' + dhPubB);
+    message = message.replace(dhPubB, '');
+    if (dhPubB && dhPrivA) {
+        key = ecdh.computeSecret(Buffer.from(dhPubB, 'hex'), null, 'hex');
+    }
+    const text = aes.decrypt(message, key);
+    // console.log('R NEW PubB: ' + dhPubB);
+    console.log(text);
 }
 
 const createSocket = () => {
@@ -36,10 +47,23 @@ const afterAuth = (k) => {
 const messageListener = () => {
     stdin.addListener("data", function (d) {
         const msg = d.toString().trim();
-        if (key) { 
-            const iv = secureRandom(16, { type: 'Uint8Array' });
-            ecdh.generateKeys();
-            socket.sendMessage(aes.encrypt(msg, ecdh.getPublicKey().toString("hex"), key, iv));
+        const iv = secureRandom(16, { type: 'Uint8Array' });
+        dhPrivA = ecdh.generateKeys('hex');
+        // console.log('S PrivA: ' + dhPrivA);
+        
+        if (dhPubB && dhPrivA) {
+            // console.log('S PubB: ' + dhPubB);
+            key = ecdh.computeSecret(Buffer.from(dhPubB, 'hex'), null, 'hex');
+        }
+        
+        // console.log('SKEY: ' + key);
+
+        if (key) {
+            console.log('Chave usada: ' + key);
+            let encrypt = aes.encrypt(msg, key, iv);
+            encrypt += ecdh.getPublicKey().toString("hex");
+            // console.log('SENDING: ' + encrypt);
+            socket.sendMessage(encrypt);
         }
     });
 }

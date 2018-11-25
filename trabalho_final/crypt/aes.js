@@ -1,7 +1,7 @@
 const aesjs = require('aes-js');
 
-const encrypt = (text, pubKey, key, iv) => {
-    const textBytes = aesjs.utils.utf8.toBytes(text + pubKey);
+const encrypt = (text, key, iv) => {
+    const textBytes = aesjs.utils.utf8.toBytes(text);
     const diff = 16 - (textBytes.length % 16);
 
     const aesCbc = new aesjs.ModeOfOperation.cbc(aesjs.utils.hex.toBytes(key), iv);
